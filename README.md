@@ -274,6 +274,11 @@ token chunking and batch limits, provider configuration, retry/heartbeat behavio
 and recovery, atomic writes, CLI failures, and an end-to-end offline pipeline fixture. No static type
 checker is configured.
 
+## Development effort
+
+Approximately **12 hours of hands-on development**, including design, implementation, testing,
+debugging, and documentation. This excludes unattended model execution and infrastructure wait time.
+
 ## Important assumptions and limitations
 
 - Static analysis does not execute runtime wiring, database queries, reflection, Lombok-generated
