@@ -93,7 +93,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--max-retries",
         type=int,
-        help="Application-level transient retries (default: Ollama 0, OpenAI 3)",
+        help="Analyzer-level transient retries (default: Ollama 0, OpenAI 3)",
     )
     parser.add_argument(
         "--cache-dir",

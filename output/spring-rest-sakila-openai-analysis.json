@@ -1,0 +1,3101 @@
+{
+  "schema_version": "1.0.0",
+  "source": {
+    "repository_url": "https://github.com/codejsha/spring-rest-sakila.git",
+    "requested_ref": "main",
+    "resolved_commit": "62873f7bb8a06681f299f8bd209cb88089e9be04",
+    "analyzed_path": "repository"
+  },
+  "generation": {
+    "generated_at": "2026-07-23T11:54:52.197428Z",
+    "generator_version": "0.1.0",
+    "mode": "llm",
+    "provider": "openai",
+    "model": "gpt-5.4-mini",
+    "token_strategy": "Tree-sitter semantic extraction, token-counted file chunks, bounded map batches, and project-level reduce synthesis",
+    "prompt_version": "2026-07-22.3"
+  },
+  "scope": {
+    "files_discovered": 260,
+    "files_processed": 203,
+    "files_sent_to_llm": 60,
+    "java_files": 188,
+    "java_methods": 608,
+    "source_lines": 11956,
+    "skipped_large_files": 1,
+    "excluded_files": 56
+  },
+  "token_budget": {
+    "encoding": "o200k_base",
+    "max_chunk_tokens": 8000,
+    "max_batch_input_tokens": 24000,
+    "prompt_reserve_tokens": 2500,
+    "max_output_tokens": 8000,
+    "max_chunks_per_batch": 12,
+    "selected_source_tokens": 31931,
+    "map_chunk_count": 60,
+    "map_batch_count": 5,
+    "largest_estimated_map_input_tokens": 17670,
+    "reduce_evidence_tokens": 16596
+  },
+  "project": {
+    "purpose": "A Spring Boot REST API for the Sakila sample database, providing CRUD, query, relationship-management, authentication, and reporting access over a MySQL-backed domain model.",
+    "overview": "This codebase is a multi-module-style Spring application organized around domain services for auth, catalog, customer, location, payment, rental, staff, and store. The API is documented with Spring REST Docs and generated OpenAPI/Postman artifacts, secured with JWT-based stateless authentication, and instrumented with Actuator/Micrometer/Prometheus. It relies on an external MySQL Sakila database rather than an embedded datastore.",
+    "primary_capabilities": [
+      "JWT login and bearer-token authentication",
+      "CRUD endpoints for actors, films, customers, addresses, cities, payments, rentals, staff, and stores",
+      "HATEOAS-based paginated collections and detail responses",
+      "Actor-film and store-staff relationship browsing and maintenance",
+      "Customer payment and rental history queries with filters",
+      "Rental checkout and return processing",
+      "Sales reporting by category and by store",
+      "Generated API documentation and observability endpoints"
+    ],
+    "architecture_style": "Layered Spring Boot REST application with controller/service/repository separation, domain mappers, custom query repositories, and stateless security configuration.",
+    "architecture_layers": [
+      {
+        "name": "Application bootstrap and configuration",
+        "responsibility": "Starts Spring Boot, configures security, authentication beans, runtime properties, and build/documentation wiring.",
+        "representative_paths": [
+          "src/main/java/com/example/app/SpringRestSakilaApplication.java",
+          "src/main/java/com/example/app/config/AuthConfig.java",
+          "src/main/java/com/example/app/config/SecurityFilterConfig.java",
+          "src/main/resources/application.yaml",
+          "build.gradle.kts"
+        ]
+      },
+      {
+        "name": "Security and authentication",
+        "responsibility": "Authenticates login requests, issues and validates JWTs, and secures requests with bearer-token processing.",
+        "representative_paths": [
+          "src/main/java/com/example/app/services/auth/controller/LoginController.java",
+          "src/main/java/com/example/app/services/auth/service/JpaUserDetailsService.java",
+          "src/main/java/com/example/app/services/auth/service/SecurityService.java",
+          "src/main/java/com/example/app/common/security/JwtTokenProvider.java",
+          "src/main/java/com/example/app/common/security/JwtAuthenticationFilter.java",
+          "src/main/java/com/example/app/common/security/JwtAuthenticationProvider.java"
+        ]
+      },
+      {
+        "name": "HTTP controllers",
+        "responsibility": "Expose REST endpoints, apply role-based access, and assemble HATEOAS responses for domain resources and subresources.",
+        "representative_paths": [
+          "src/main/java/com/example/app/services/catalog/controller/ActorController.java",
+          "src/main/java/com/example/app/services/catalog/controller/FilmController.java",
+          "src/main/java/com/example/app/services/customer/controller/CustomerController.java",
+          "src/main/java/com/example/app/services/location/controller/LocationController.java",
+          "src/main/java/com/example/app/services/payment/controller/PaymentController.java",
+          "src/main/java/com/example/app/services/rental/controller/RentalController.java",
+          "src/main/java/com/example/app/services/staff/controller/StaffController.java",
+          "src/main/java/com/example/app/services/store/controller/StoreController.java",
+          "src/main/java/com/example/app/services/store/controller/ReportController.java"
+        ]
+      },
+      {
+        "name": "Service layer",
+        "responsibility": "Implements domain use cases, transaction boundaries, filtering, caching, and cross-entity orchestration such as rentals and payments.",
+        "representative_paths": [
+          "src/main/java/com/example/app/services/catalog/service/ActorServiceImpl.java",
+          "src/main/java/com/example/app/services/catalog/service/FilmServiceImpl.java",
+          "src/main/java/com/example/app/services/customer/service/CustomerServiceImpl.java",
+          "src/main/java/com/example/app/services/location/service/LocationServiceImpl.java",
+          "src/main/java/com/example/app/services/payment/service/PaymentServiceImpl.java",
+          "src/main/java/com/example/app/services/rental/service/RentalServiceImpl.java",
+          "src/main/java/com/example/app/services/staff/service/StaffServiceImpl.java",
+          "src/main/java/com/example/app/services/store/service/StoreServiceImpl.java",
+          "src/main/java/com/example/app/services/store/service/ReportServiceImpl.java"
+        ]
+      },
+      {
+        "name": "Persistence and custom queries",
+        "responsibility": "Provides Spring Data repositories plus Querydsl/Blaze-Persistence custom implementations for projections, filtering, aggregations, and association queries.",
+        "representative_paths": [
+          "src/main/java/com/example/app/services/auth/repository/AuthorityRepository.java",
+          "src/main/java/com/example/app/services/catalog/repository/custom/CustomActorRepositoryImpl.java",
+          "src/main/java/com/example/app/services/catalog/repository/custom/CustomFilmRepositoryImpl.java",
+          "src/main/java/com/example/app/services/customer/repository/custom/CustomCustomerRepositoryImpl.java",
+          "src/main/java/com/example/app/services/location/repository/custom/CustomAddressRepositoryImpl.java",
+          "src/main/java/com/example/app/services/payment/repository/custom/CustomPaymentRepositoryImpl.java",
+          "src/main/java/com/example/app/services/rental/repository/custom/CustomRentalRepositoryImpl.java",
+          "src/main/java/com/example/app/services/staff/repository/custom/CustomStaffRepositoryImpl.java",
+          "src/main/java/com/example/app/services/store/repository/custom/CustomStoreRepositoryImpl.java"
+        ]
+      },
+      {
+        "name": "Domain mapping",
+        "responsibility": "Maps entities to DTOs and request models with MapStruct, often omitting associations and stamping timestamps during creation.",
+        "representative_paths": [
+          "src/main/java/com/example/app/services/catalog/domain/mapper/ActorMapper.java",
+          "src/main/java/com/example/app/services/catalog/domain/mapper/FilmMapper.java",
+          "src/main/java/com/example/app/services/customer/domain/mapper/CustomerMapper.java",
+          "src/main/java/com/example/app/services/location/domain/mapper/AddressMapper.java",
+          "src/main/java/com/example/app/services/location/domain/mapper/CityMapper.java",
+          "src/main/java/com/example/app/services/payment/domain/mapper/PaymentMapper.java",
+          "src/main/java/com/example/app/services/rental/domain/mapper/RentalMapper.java",
+          "src/main/java/com/example/app/services/staff/domain/mapper/StaffMapper.java",
+          "src/main/java/com/example/app/services/store/domain/mapper/InventoryMapper.java",
+          "src/main/java/com/example/app/services/store/domain/mapper/StoreMapper.java"
+        ]
+      }
+    ],
+    "typical_request_flow": [
+      "A client authenticates via /login with credentials handled by LoginController.",
+      "JpaUserDetailsService loads the user and SecurityService/JwtTokenProvider create a JWT, which is returned in an Authorization Bearer header.",
+      "For subsequent requests, JwtAuthenticationFilter extracts the bearer token and authenticates it through the configured AuthenticationManager.",
+      "A secured controller such as FilmController, CustomerController, or StoreController receives the request and enforces role restrictions.",
+      "The controller delegates to a domain service, which performs transaction-aware business logic, caching, filtering, or cross-entity coordination.",
+      "The service calls a repository or custom Querydsl/Blaze-Persistence implementation to fetch entities or projections.",
+      "MapStruct mappers convert entities or request payloads into DTOs or entities as needed, and the controller returns HATEOAS or single-resource responses."
+    ],
+    "noteworthy_aspects": [
+      "The application is strongly read-model oriented: many endpoints return distinct summary and detail DTOs, often assembled into HATEOAS collections.",
+      "Custom repositories use Querydsl and Blaze-Persistence for filtered lists, projections, grouped aggregates, and association queries.",
+      "Several services use caching annotations for single-entity reads and updates, especially in catalog flows.",
+      "Rental checkout is notably composite: it coordinates store, customer, staff, film, and payment data.",
+      "Observability and documentation are first-class concerns, with Actuator/Prometheus exposure and REST Docs-driven generated artifacts.",
+      "Some custom repository methods and service methods are stubs or return null/empty results in the analyzed chunks, especially in location and payment detail paths, and some overdue-rental methods are unimplemented in the shown service chunk.",
+      "Complexity is generally low across the codebase, with a small number of high-complexity equals methods in DTO/entity classes."
+    ],
+    "assumptions_and_limitations": [
+      "This synthesis is based only on the provided static analysis evidence; runtime behavior outside the analyzed chunks may differ.",
+      "The architecture was inferred from controllers, services, repositories, mappers, and configuration; no claim is made about deployment topology or external infrastructure beyond the documented MySQL dependency.",
+      "Some repository and service methods are explicitly stubbed or return null/empty Optionals in the evidence, so related features may be incomplete.",
+      "The report does not confirm all endpoint paths or authorization rules beyond what is described in the analyzed controller files and configuration.",
+      "No assumption is made about non-analyzed modules, tests, or generated code beyond what the build and documentation configuration indicate."
+    ]
+  },
+  "technologies": [
+    "Java 17",
+    "Spring Boot",
+    "Spring Web",
+    "Spring Data JPA",
+    "Spring Security",
+    "Spring HATEOAS",
+    "MySQL",
+    "Redis",
+    "Querydsl",
+    "MapStruct",
+    "Blaze-Persistence",
+    "Lombok",
+    "JWT",
+    "Spring REST Docs",
+    "Spring Boot Actuator",
+    "Prometheus",
+    "Gradle"
+  ],
+  "modules": [
+    "application",
+    "common",
+    "config",
+    "services/auth",
+    "services/catalog",
+    "services/customer",
+    "services/location",
+    "services/payment",
+    "services/rental",
+    "services/staff",
+    "services/store"
+  ],
+  "complexity": {
+    "metric": "Cyclomatic complexity (1 + decision points)",
+    "average_per_method": 1.81,
+    "maximum": 16,
+    "low_count": 561,
+    "moderate_count": 36,
+    "high_count": 11,
+    "very_high_count": 0,
+    "hotspots": [
+      {
+        "method_id": "src.main.java.com.example.app.services.catalog.domain.dto.FilmDto#Film.equals:1",
+        "file_path": "src/main/java/com/example/app/services/catalog/domain/dto/FilmDto.java",
+        "signature": "public boolean equals(Object o)",
+        "cyclomatic_complexity": 16,
+        "complexity_rating": "high"
+      },
+      {
+        "method_id": "src.main.java.com.example.app.services.catalog.domain.entity.FilmEntity#FilmEntity.equals:2",
+        "file_path": "src/main/java/com/example/app/services/catalog/domain/entity/FilmEntity.java",
+        "signature": "public boolean equals(Object o)",
+        "cyclomatic_complexity": 16,
+        "complexity_rating": "high"
+      },
+      {
+        "method_id": "src.main.java.com.example.app.services.catalog.domain.dto.FilmDto#FilmRequest.equals:3",
+        "file_path": "src/main/java/com/example/app/services/catalog/domain/dto/FilmDto.java",
+        "signature": "public boolean equals(Object o)",
+        "cyclomatic_complexity": 14,
+        "complexity_rating": "high"
+      },
+      {
+        "method_id": "src.main.java.com.example.app.services.customer.domain.dto.CustomerDetailsDto#CustomerDetails.equals:1",
+        "file_path": "src/main/java/com/example/app/services/customer/domain/dto/CustomerDetailsDto.java",
+        "signature": "public boolean equals(Object o)",
+        "cyclomatic_complexity": 12,
+        "complexity_rating": "high"
+      },
+      {
+        "method_id": "src.main.java.com.example.app.services.catalog.domain.dto.FilmDetailsDto#FilmDetails.equals:1",
+        "file_path": "src/main/java/com/example/app/services/catalog/domain/dto/FilmDetailsDto.java",
+        "signature": "public boolean equals(Object o)",
+        "cyclomatic_complexity": 11,
+        "complexity_rating": "high"
+      },
+      {
+        "method_id": "src.main.java.com.example.app.services.customer.domain.entity.CustomerEntity#CustomerEntity.equals:2",
+        "file_path": "src/main/java/com/example/app/services/customer/domain/entity/CustomerEntity.java",
+        "signature": "public boolean equals(Object o)",
+        "cyclomatic_complexity": 11,
+        "complexity_rating": "high"
+      },
+      {
+        "method_id": "src.main.java.com.example.app.services.location.domain.dto.AddressDto#Address.equals:1",
+        "file_path": "src/main/java/com/example/app/services/location/domain/dto/AddressDto.java",
+        "signature": "public boolean equals(Object o)",
+        "cyclomatic_complexity": 11,
+        "complexity_rating": "high"
+      },
+      {
+        "method_id": "src.main.java.com.example.app.services.location.domain.entity.AddressEntity#AddressEntity.equals:2",
+        "file_path": "src/main/java/com/example/app/services/location/domain/entity/AddressEntity.java",
+        "signature": "public boolean equals(Object o)",
+        "cyclomatic_complexity": 11,
+        "complexity_rating": "high"
+      },
+      {
+        "method_id": "src.main.java.com.example.app.services.staff.domain.dto.StaffDetailsDto#StaffDetails.equals:1",
+        "file_path": "src/main/java/com/example/app/services/staff/domain/dto/StaffDetailsDto.java",
+        "signature": "public boolean equals(Object o)",
+        "cyclomatic_complexity": 11,
+        "complexity_rating": "high"
+      },
+      {
+        "method_id": "src.main.java.com.example.app.services.staff.domain.dto.StaffDto#Staff.equals:1",
+        "file_path": "src/main/java/com/example/app/services/staff/domain/dto/StaffDto.java",
+        "signature": "public boolean equals(Object o)",
+        "cyclomatic_complexity": 11,
+        "complexity_rating": "high"
+      }
+    ]
+  },
+  "key_methods": [
+    {
+      "method_id": "src.main.java.com.example.app.services.auth.controller.LoginController#LoginController.userLogin:1",
+      "file_path": "src/main/java/com/example/app/services/auth/controller/LoginController.java",
+      "class_name": "LoginController",
+      "signature": "public ResponseEntity<Void> userLogin(@RequestBody AuthorityDto.Login login)",
+      "description": "Authenticates the supplied login credentials, issues a JWT, records the authenticated token, and returns the token in the response headers.",
+      "start_line": 23,
+      "end_line": 32,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PostMapping"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.rental.controller.RentalController#RentalController.rentDvd:2",
+      "file_path": "src/main/java/com/example/app/services/rental/controller/RentalController.java",
+      "class_name": "RentalController",
+      "signature": "public ResponseEntity<Void> rentDvd(@RequestBody RentalDto.RentalCreateRequest model)",
+      "description": "Creates a new rental, supplying the current timestamp when the request omits rentalDate, and returns a 201 Created response pointing to the created rental.",
+      "start_line": 37,
+      "end_line": 46,
+      "cyclomatic_complexity": 2,
+      "complexity_rating": "low",
+      "annotations": [
+        "PostMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.rental.controller.RentalController#RentalController.returnDvd:6",
+      "file_path": "src/main/java/com/example/app/services/rental/controller/RentalController.java",
+      "class_name": "RentalController",
+      "signature": "public ResponseEntity<Void> returnDvd(@RequestBody Map<String, String> input)",
+      "description": "Processes a rental return request, filling in returnDate when absent, delegating to the rental service, and returning an OK response.",
+      "start_line": 72,
+      "end_line": 80,
+      "cyclomatic_complexity": 2,
+      "complexity_rating": "low",
+      "annotations": [
+        "PutMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.getActorList:1",
+      "file_path": "src/main/java/com/example/app/services/catalog/controller/ActorController.java",
+      "class_name": "ActorController",
+      "signature": "public ResponseEntity<CollectionModel<ActorDto.ActorResponse>> getActorList( @PageableDefault(size = 10, page = 0, direction = Sort.Direction.ASC) Pageable pageable)",
+      "description": "Returns a paginated HATEOAS collection of actors for read users.",
+      "start_line": 41,
+      "end_line": 47,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.addActor:2",
+      "file_path": "src/main/java/com/example/app/services/catalog/controller/ActorController.java",
+      "class_name": "ActorController",
+      "signature": "public ResponseEntity<Void> addActor(@RequestBody ActorDto.ActorRequest model)",
+      "description": "Creates an actor and returns a 201 Created response pointing to the new actor resource.",
+      "start_line": 49,
+      "end_line": 55,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PostMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.getActor:3",
+      "file_path": "src/main/java/com/example/app/services/catalog/controller/ActorController.java",
+      "class_name": "ActorController",
+      "signature": "public ResponseEntity<ActorDto.ActorResponse> getActor(@PathVariable Integer actorId)",
+      "description": "Fetches an actor by ID and returns 404 when it is missing.",
+      "start_line": 57,
+      "end_line": 64,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.updateActor:4",
+      "file_path": "src/main/java/com/example/app/services/catalog/controller/ActorController.java",
+      "class_name": "ActorController",
+      "signature": "public ResponseEntity<Void> updateActor(@PathVariable Integer actorId, @RequestBody ActorDto.ActorRequest model)",
+      "description": "Updates an actor by ID and returns OK.",
+      "start_line": 66,
+      "end_line": 72,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PutMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.deleteActor:5",
+      "file_path": "src/main/java/com/example/app/services/catalog/controller/ActorController.java",
+      "class_name": "ActorController",
+      "signature": "public ResponseEntity<Void> deleteActor(@PathVariable Integer actorId)",
+      "description": "Deletes an actor by ID and returns 204 No Content.",
+      "start_line": 74,
+      "end_line": 79,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "DeleteMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.getActorDetails:6",
+      "file_path": "src/main/java/com/example/app/services/catalog/controller/ActorController.java",
+      "class_name": "ActorController",
+      "signature": "public ResponseEntity<ActorDetailsDto.ActorDetailsResponse> getActorDetails(@PathVariable Integer actorId)",
+      "description": "Fetches detailed actor information and returns it when present.",
+      "start_line": 81,
+      "end_line": 88,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.getActorFilmList:7",
+      "file_path": "src/main/java/com/example/app/services/catalog/controller/ActorController.java",
+      "class_name": "ActorController",
+      "signature": "public ResponseEntity<CollectionModel<FilmDto.FilmResponse>> getActorFilmList( @PathVariable Integer actorId, @RequestParam(required = false) String category, @RequestParam(required = false) String releaseYear, @RequestParam(required = false) String rating, @PageableDefault(size = 10, page = 0, direction = Sort.Direction.ASC) Pageable pageable)",
+      "description": "Returns a filtered, paginated HATEOAS collection of films associated with an actor and adds self, actor, and film-list links.",
+      "start_line": 90,
+      "end_line": 110,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.addActorFilm:8",
+      "file_path": "src/main/java/com/example/app/services/catalog/controller/ActorController.java",
+      "class_name": "ActorController",
+      "signature": "public ResponseEntity<Void> addActorFilm(@PathVariable Integer actorId, @RequestBody Map<String, String> input)",
+      "description": "Associates a film with an actor and returns a Location header for the created association resource.",
+      "start_line": 112,
+      "end_line": 119,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PostMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.getActorFilm:9",
+      "file_path": "src/main/java/com/example/app/services/catalog/controller/ActorController.java",
+      "class_name": "ActorController",
+      "signature": "public ResponseEntity<FilmDto.FilmResponse> getActorFilm(@PathVariable Integer actorId, @PathVariable Integer filmId)",
+      "description": "Fetches a specific film linked to an actor and enriches the response with navigation links.",
+      "start_line": 121,
+      "end_line": 134,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.deleteActorFilm:10",
+      "file_path": "src/main/java/com/example/app/services/catalog/controller/ActorController.java",
+      "class_name": "ActorController",
+      "signature": "public ResponseEntity<Void> deleteActorFilm(@PathVariable Integer actorId, @PathVariable Integer filmId)",
+      "description": "Removes a film association from an actor and returns 204 No Content.",
+      "start_line": 136,
+      "end_line": 142,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "DeleteMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.getActorFilmDetails:11",
+      "file_path": "src/main/java/com/example/app/services/catalog/controller/ActorController.java",
+      "class_name": "ActorController",
+      "signature": "public ResponseEntity<FilmDetailsDto.FilmDetailsResponse> getActorFilmDetails(@PathVariable Integer actorId, @PathVariable Integer filmId)",
+      "description": "Fetches detailed information for a film associated with an actor and adds navigation links.",
+      "start_line": 144,
+      "end_line": 158,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.searchActorByName:12",
+      "file_path": "src/main/java/com/example/app/services/catalog/controller/ActorController.java",
+      "class_name": "ActorController",
+      "signature": "public ResponseEntity<CollectionModel<ActorDto.ActorResponse>> searchActorByName (@RequestBody Map<String, String> input)",
+      "description": "Searches actors by name and returns the matching collection as HATEOAS resources.",
+      "start_line": 160,
+      "end_line": 166,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PostMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.controller.FilmController#FilmController.getFilmList:1",
+      "file_path": "src/main/java/com/example/app/services/catalog/controller/FilmController.java",
+      "class_name": "FilmController",
+      "signature": "public ResponseEntity<CollectionModel<FilmDto.FilmResponse>> getFilmList( @RequestParam(required = false) String category, @RequestParam(required = false) String releaseYear, @RequestParam(required = false) String rating, @PageableDefault(size = 10, page = 0, direction = Sort.Direction.ASC) Pageable pageable)",
+      "description": "Returns a paginated, optionally filtered HATEOAS collection of films.",
+      "start_line": 38,
+      "end_line": 52,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.controller.FilmController#FilmController.addFilm:2",
+      "file_path": "src/main/java/com/example/app/services/catalog/controller/FilmController.java",
+      "class_name": "FilmController",
+      "signature": "public ResponseEntity<Void> addFilm(@RequestBody FilmDto.FilmRequest model)",
+      "description": "Creates a film and returns a 201 Created response pointing to the created film resource.",
+      "start_line": 54,
+      "end_line": 60,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PostMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.controller.FilmController#FilmController.getFilm:3",
+      "file_path": "src/main/java/com/example/app/services/catalog/controller/FilmController.java",
+      "class_name": "FilmController",
+      "signature": "public ResponseEntity<FilmDto.FilmResponse> getFilm(@PathVariable Integer filmId)",
+      "description": "Fetches a film by ID and returns 404 when absent.",
+      "start_line": 62,
+      "end_line": 69,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.controller.FilmController#FilmController.updateFilm:4",
+      "file_path": "src/main/java/com/example/app/services/catalog/controller/FilmController.java",
+      "class_name": "FilmController",
+      "signature": "public ResponseEntity<Void> updateFilm(@PathVariable Integer filmId, @RequestBody FilmDto.FilmRequest model)",
+      "description": "Updates a film by ID and returns OK.",
+      "start_line": 71,
+      "end_line": 77,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PutMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.controller.FilmController#FilmController.deleteFilm:5",
+      "file_path": "src/main/java/com/example/app/services/catalog/controller/FilmController.java",
+      "class_name": "FilmController",
+      "signature": "public ResponseEntity<Void> deleteFilm(@PathVariable Integer filmId)",
+      "description": "Deletes a film by ID and returns 204 No Content.",
+      "start_line": 79,
+      "end_line": 84,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "DeleteMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.controller.FilmController#FilmController.getFilmActorList:6",
+      "file_path": "src/main/java/com/example/app/services/catalog/controller/FilmController.java",
+      "class_name": "FilmController",
+      "signature": "public ResponseEntity<CollectionModel<ActorDto.ActorResponse>> getFilmActorList( @PathVariable Integer filmId, @PageableDefault(size = 10, page = 0, direction = Sort.Direction.ASC) Pageable pageable)",
+      "description": "Returns a paginated HATEOAS collection of actors associated with a film.",
+      "start_line": 86,
+      "end_line": 93,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.controller.FilmController#FilmController.getFilmActor:7",
+      "file_path": "src/main/java/com/example/app/services/catalog/controller/FilmController.java",
+      "class_name": "FilmController",
+      "signature": "public ResponseEntity<ActorDto.ActorResponse> getFilmActor(@PathVariable Integer filmId, @PathVariable Integer actorId)",
+      "description": "Fetches a specific actor associated with a film and returns it when found.",
+      "start_line": 95,
+      "end_line": 103,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.controller.FilmController#FilmController.getFilmDetails:8",
+      "file_path": "src/main/java/com/example/app/services/catalog/controller/FilmController.java",
+      "class_name": "FilmController",
+      "signature": "public ResponseEntity<FilmDetailsDto.FilmDetailsResponse> getFilmDetails(@PathVariable Integer filmId)",
+      "description": "Fetches detailed information for a film and returns it when available.",
+      "start_line": 105,
+      "end_line": 112,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.customer.controller.CustomerController#CustomerController.getCustomerList:1",
+      "file_path": "src/main/java/com/example/app/services/customer/controller/CustomerController.java",
+      "class_name": "CustomerController",
+      "signature": "public ResponseEntity<CollectionModel<CustomerDto.CustomerResponse>> getCustomerList( @PageableDefault(size = 10, page = 0, direction = Sort.Direction.ASC) Pageable pageable)",
+      "description": "Returns a paginated HATEOAS collection of customers.",
+      "start_line": 36,
+      "end_line": 42,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.customer.controller.CustomerController#CustomerController.addCustomer:2",
+      "file_path": "src/main/java/com/example/app/services/customer/controller/CustomerController.java",
+      "class_name": "CustomerController",
+      "signature": "public ResponseEntity<Void> addCustomer(@RequestBody CustomerDto.CustomerRequest model)",
+      "description": "Creates a customer and returns a 201 Created response pointing to the new customer resource.",
+      "start_line": 44,
+      "end_line": 50,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PostMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.customer.controller.CustomerController#CustomerController.getCustomer:3",
+      "file_path": "src/main/java/com/example/app/services/customer/controller/CustomerController.java",
+      "class_name": "CustomerController",
+      "signature": "public ResponseEntity<CustomerDto.CustomerResponse> getCustomer(@PathVariable Integer customerId)",
+      "description": "Fetches a customer by ID and returns 404 when missing.",
+      "start_line": 52,
+      "end_line": 59,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.customer.controller.CustomerController#CustomerController.updateCustomer:4",
+      "file_path": "src/main/java/com/example/app/services/customer/controller/CustomerController.java",
+      "class_name": "CustomerController",
+      "signature": "public ResponseEntity<Void> updateCustomer(@PathVariable Integer customerId, @RequestBody CustomerDto.CustomerRequest model)",
+      "description": "Updates a customer by ID and returns OK.",
+      "start_line": 61,
+      "end_line": 67,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PutMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.customer.controller.CustomerController#CustomerController.deleteCustomer:5",
+      "file_path": "src/main/java/com/example/app/services/customer/controller/CustomerController.java",
+      "class_name": "CustomerController",
+      "signature": "public ResponseEntity<Void> deleteCustomer(@PathVariable Integer customerId)",
+      "description": "Deletes a customer by ID and returns 204 No Content.",
+      "start_line": 69,
+      "end_line": 74,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "DeleteMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.customer.controller.CustomerController#CustomerController.getCustomerDetails:6",
+      "file_path": "src/main/java/com/example/app/services/customer/controller/CustomerController.java",
+      "class_name": "CustomerController",
+      "signature": "public ResponseEntity<CustomerDetailsDto.CustomerDetailsResponse> getCustomerDetails( @PathVariable Integer customerId)",
+      "description": "Fetches detailed customer information and returns it when present.",
+      "start_line": 76,
+      "end_line": 84,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.customer.controller.CustomerController#CustomerController.getCustomerPaymentList:7",
+      "file_path": "src/main/java/com/example/app/services/customer/controller/CustomerController.java",
+      "class_name": "CustomerController",
+      "signature": "public ResponseEntity<CollectionModel<PaymentDto.PaymentResponse>> getCustomerPaymentList( @PathVariable Integer customerId, @RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate)",
+      "description": "Returns a HATEOAS collection of payments for a customer, filtered by optional start and end dates.",
+      "start_line": 86,
+      "end_line": 94,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.customer.controller.CustomerController#CustomerController.getCustomerRentalList:8",
+      "file_path": "src/main/java/com/example/app/services/customer/controller/CustomerController.java",
+      "class_name": "CustomerController",
+      "signature": "public ResponseEntity<CollectionModel<RentalDto.RentalResponse>> getCustomerRentalList( @PathVariable Integer customerId, @RequestParam(required = false) String status, @RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate)",
+      "description": "Returns a HATEOAS collection of rentals for a customer, optionally filtered by rental status and date range.",
+      "start_line": 96,
+      "end_line": 106,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.getAddressList:1",
+      "file_path": "src/main/java/com/example/app/services/location/controller/LocationController.java",
+      "class_name": "LocationController",
+      "signature": "public ResponseEntity<CollectionModel<AddressDto.AddressResponse>> getAddressList( @PageableDefault(size = 10, page = 0, direction = Sort.Direction.ASC) Pageable pageable)",
+      "description": "Returns a paginated HATEOAS collection of addresses.",
+      "start_line": 29,
+      "end_line": 35,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.addAddress:2",
+      "file_path": "src/main/java/com/example/app/services/location/controller/LocationController.java",
+      "class_name": "LocationController",
+      "signature": "public ResponseEntity<Void> addAddress(@RequestBody AddressDto.AddressRequest model)",
+      "description": "Creates an address and returns a 201 Created response pointing to the new address resource.",
+      "start_line": 37,
+      "end_line": 43,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PostMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.getAddress:3",
+      "file_path": "src/main/java/com/example/app/services/location/controller/LocationController.java",
+      "class_name": "LocationController",
+      "signature": "public ResponseEntity<AddressDto.AddressResponse> getAddress(@PathVariable Integer addressId)",
+      "description": "Fetches an address by ID and returns 404 when absent.",
+      "start_line": 45,
+      "end_line": 52,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.updateAddress:4",
+      "file_path": "src/main/java/com/example/app/services/location/controller/LocationController.java",
+      "class_name": "LocationController",
+      "signature": "public ResponseEntity<Void> updateAddress(@PathVariable Integer addressId, @RequestBody AddressDto.AddressRequest model)",
+      "description": "Updates an address by ID and returns OK.",
+      "start_line": 54,
+      "end_line": 60,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PutMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.deleteAddress:5",
+      "file_path": "src/main/java/com/example/app/services/location/controller/LocationController.java",
+      "class_name": "LocationController",
+      "signature": "public ResponseEntity<Void> deleteAddress(@PathVariable Integer addressId)",
+      "description": "Deletes an address by ID and returns 204 No Content.",
+      "start_line": 62,
+      "end_line": 67,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "DeleteMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.getAddressDetails:6",
+      "file_path": "src/main/java/com/example/app/services/location/controller/LocationController.java",
+      "class_name": "LocationController",
+      "signature": "public ResponseEntity<AddressDto.AddressResponse> getAddressDetails(@PathVariable Integer addressId)",
+      "description": "Fetches detailed address information and returns it when available.",
+      "start_line": 69,
+      "end_line": 76,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.getCityList:7",
+      "file_path": "src/main/java/com/example/app/services/location/controller/LocationController.java",
+      "class_name": "LocationController",
+      "signature": "public ResponseEntity<CollectionModel<CityDto.CityResponse>> getCityList( @PageableDefault(size = 10, page = 0, direction = Sort.Direction.ASC) Pageable pageable)",
+      "description": "Returns a paginated HATEOAS collection of cities.",
+      "start_line": 78,
+      "end_line": 84,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.addCity:8",
+      "file_path": "src/main/java/com/example/app/services/location/controller/LocationController.java",
+      "class_name": "LocationController",
+      "signature": "public ResponseEntity<Void> addCity(@RequestBody CityDto.CityRequest model)",
+      "description": "Creates a city and returns a 201 Created response pointing to the new city resource.",
+      "start_line": 86,
+      "end_line": 92,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PostMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.getCity:9",
+      "file_path": "src/main/java/com/example/app/services/location/controller/LocationController.java",
+      "class_name": "LocationController",
+      "signature": "public ResponseEntity<CityDto.CityResponse> getCity(@PathVariable Integer cityId)",
+      "description": "Fetches a city by ID and returns 404 when absent.",
+      "start_line": 94,
+      "end_line": 101,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.updateCity:10",
+      "file_path": "src/main/java/com/example/app/services/location/controller/LocationController.java",
+      "class_name": "LocationController",
+      "signature": "public ResponseEntity<Void> updateCity(@PathVariable Integer cityId, @RequestBody CityDto.CityRequest model)",
+      "description": "Updates a city by ID and returns OK.",
+      "start_line": 103,
+      "end_line": 109,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PutMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.deleteCity:11",
+      "file_path": "src/main/java/com/example/app/services/location/controller/LocationController.java",
+      "class_name": "LocationController",
+      "signature": "public ResponseEntity<Void> deleteCity(@PathVariable Integer cityId)",
+      "description": "Deletes a city by ID and returns 204 No Content.",
+      "start_line": 111,
+      "end_line": 116,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "DeleteMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.payment.controller.PaymentController#PaymentController.getPaymentList:1",
+      "file_path": "src/main/java/com/example/app/services/payment/controller/PaymentController.java",
+      "class_name": "PaymentController",
+      "signature": "public ResponseEntity<CollectionModel<PaymentDto.PaymentResponse>> getPaymentList( @PageableDefault(size = 10, page = 0, direction = Sort.Direction.ASC) Pageable pageable)",
+      "description": "Returns a paginated HATEOAS collection of payments.",
+      "start_line": 23,
+      "end_line": 29,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.payment.controller.PaymentController#PaymentController.getPayment:2",
+      "file_path": "src/main/java/com/example/app/services/payment/controller/PaymentController.java",
+      "class_name": "PaymentController",
+      "signature": "public ResponseEntity<PaymentDto.PaymentResponse> getPayment(@PathVariable Integer paymentId)",
+      "description": "Fetches a payment by ID and returns 404 when absent.",
+      "start_line": 31,
+      "end_line": 38,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.payment.controller.PaymentController#PaymentController.updatePayment:3",
+      "file_path": "src/main/java/com/example/app/services/payment/controller/PaymentController.java",
+      "class_name": "PaymentController",
+      "signature": "public ResponseEntity<Void> updatePayment(@PathVariable Integer paymentId, @RequestBody PaymentDto.PaymentRequest model)",
+      "description": "Updates a payment by ID and returns OK.",
+      "start_line": 40,
+      "end_line": 46,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PutMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.payment.controller.PaymentController#PaymentController.deletePayment:4",
+      "file_path": "src/main/java/com/example/app/services/payment/controller/PaymentController.java",
+      "class_name": "PaymentController",
+      "signature": "public ResponseEntity<Void> deletePayment(@PathVariable Integer paymentId)",
+      "description": "Deletes a payment by ID and returns 204 No Content.",
+      "start_line": 48,
+      "end_line": 53,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "DeleteMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.payment.controller.PaymentController#PaymentController.getPaymentDetails:5",
+      "file_path": "src/main/java/com/example/app/services/payment/controller/PaymentController.java",
+      "class_name": "PaymentController",
+      "signature": "public ResponseEntity<PaymentDto.PaymentResponse> getPaymentDetails(@PathVariable Integer paymentId)",
+      "description": "Fetches detailed payment information and returns it when available.",
+      "start_line": 55,
+      "end_line": 62,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.rental.controller.RentalController#RentalController.getRentalList:1",
+      "file_path": "src/main/java/com/example/app/services/rental/controller/RentalController.java",
+      "class_name": "RentalController",
+      "signature": "public ResponseEntity<CollectionModel<RentalDto.RentalResponse>> getRentalList( @PageableDefault(size = 10, page = 0, direction = Sort.Direction.ASC) Pageable pageable)",
+      "description": "Returns a paginated HATEOAS collection of rentals for management users.",
+      "start_line": 29,
+      "end_line": 35,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.rental.controller.RentalController#RentalController.getRental:3",
+      "file_path": "src/main/java/com/example/app/services/rental/controller/RentalController.java",
+      "class_name": "RentalController",
+      "signature": "public ResponseEntity<RentalDto.RentalResponse> getRental(@PathVariable Integer rentalId)",
+      "description": "Fetches a rental by ID and returns it when present, otherwise responds with 404.",
+      "start_line": 48,
+      "end_line": 55,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.rental.controller.RentalController#RentalController.updateRental:4",
+      "file_path": "src/main/java/com/example/app/services/rental/controller/RentalController.java",
+      "class_name": "RentalController",
+      "signature": "public ResponseEntity<Void> updateRental(@PathVariable Integer rentalId, @ModelAttribute RentalDto.RentalUpdateRequest model)",
+      "description": "Updates an existing rental and returns an OK response.",
+      "start_line": 57,
+      "end_line": 63,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PutMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.rental.controller.RentalController#RentalController.deleteRental:5",
+      "file_path": "src/main/java/com/example/app/services/rental/controller/RentalController.java",
+      "class_name": "RentalController",
+      "signature": "public ResponseEntity<Void> deleteRental(@PathVariable Integer rentalId)",
+      "description": "Deletes a rental by ID and returns 204 No Content.",
+      "start_line": 65,
+      "end_line": 70,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "DeleteMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.staff.controller.StaffController#StaffController.getStaffList:1",
+      "file_path": "src/main/java/com/example/app/services/staff/controller/StaffController.java",
+      "class_name": "StaffController",
+      "signature": "public ResponseEntity<CollectionModel<StaffDto.StaffResponse>> getStaffList( @PageableDefault(size = 10, page = 0, direction = Sort.Direction.ASC) Pageable pageable)",
+      "description": "Returns a paginated collection of staff representations assembled from the service-provided staff list.",
+      "start_line": 29,
+      "end_line": 35,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.staff.controller.StaffController#StaffController.addStaff:2",
+      "file_path": "src/main/java/com/example/app/services/staff/controller/StaffController.java",
+      "class_name": "StaffController",
+      "signature": "public ResponseEntity<Void> addStaff(@RequestBody StaffDto.StaffRequest model)",
+      "description": "Creates a staff record via the service and returns 201 Created with a Location header pointing to the new staff resource.",
+      "start_line": 37,
+      "end_line": 43,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PostMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.staff.controller.StaffController#StaffController.getStaff:3",
+      "file_path": "src/main/java/com/example/app/services/staff/controller/StaffController.java",
+      "class_name": "StaffController",
+      "signature": "public ResponseEntity<StaffDto.StaffResponse> getStaff(@PathVariable Integer staffId)",
+      "description": "Fetches a single staff record by ID, maps it to a response model, and returns 404 if not found.",
+      "start_line": 45,
+      "end_line": 52,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.staff.controller.StaffController#StaffController.updateStaff:4",
+      "file_path": "src/main/java/com/example/app/services/staff/controller/StaffController.java",
+      "class_name": "StaffController",
+      "signature": "public ResponseEntity<Void> updateStaff(@PathVariable Integer staffId, @RequestBody StaffDto.StaffRequest model)",
+      "description": "Updates a staff record by ID through the service and returns a success response without a body.",
+      "start_line": 54,
+      "end_line": 60,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PutMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.staff.controller.StaffController#StaffController.deleteStaff:5",
+      "file_path": "src/main/java/com/example/app/services/staff/controller/StaffController.java",
+      "class_name": "StaffController",
+      "signature": "public ResponseEntity<Void> deleteStaff(@PathVariable Integer staffId)",
+      "description": "Deletes a staff record by ID through the service and returns 204 No Content.",
+      "start_line": 62,
+      "end_line": 67,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "DeleteMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.staff.controller.StaffController#StaffController.getStaffDetails:6",
+      "file_path": "src/main/java/com/example/app/services/staff/controller/StaffController.java",
+      "class_name": "StaffController",
+      "signature": "public ResponseEntity<StaffDetailsDto.StaffDetailsResponse> getStaffDetails(@PathVariable Integer staffId)",
+      "description": "Fetches detailed staff information by ID, maps it to a detail response model, and returns 404 if absent.",
+      "start_line": 69,
+      "end_line": 76,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.store.controller.ReportController#ReportController.reportSalesByCategory:1",
+      "file_path": "src/main/java/com/example/app/services/store/controller/ReportController.java",
+      "class_name": "ReportController",
+      "signature": "public ResponseEntity<CollectionModel<CategorySalesDto.CategorySalesResponse>> reportSalesByCategory()",
+      "description": "Returns a collection of sales-by-category report responses assembled from the report service output.",
+      "start_line": 25,
+      "end_line": 30,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.store.controller.ReportController#ReportController.reportSalesByStore:2",
+      "file_path": "src/main/java/com/example/app/services/store/controller/ReportController.java",
+      "class_name": "ReportController",
+      "signature": "public ResponseEntity<CollectionModel<StoreSalesDto.StoreSalesResponse>> reportSalesByStore()",
+      "description": "Returns a collection of sales-by-store report responses assembled from the report service output.",
+      "start_line": 32,
+      "end_line": 37,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.getStoreList:1",
+      "file_path": "src/main/java/com/example/app/services/store/controller/StoreController.java",
+      "class_name": "StoreController",
+      "signature": "public ResponseEntity<CollectionModel<StoreDto.StoreResponse>> getStoreList( @PageableDefault(size = 10, page = 0, direction = Sort.Direction.ASC) Pageable pageable)",
+      "description": "Returns a paginated collection of store representations assembled from the service-provided store list.",
+      "start_line": 32,
+      "end_line": 38,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.addStore:2",
+      "file_path": "src/main/java/com/example/app/services/store/controller/StoreController.java",
+      "class_name": "StoreController",
+      "signature": "public ResponseEntity<Void> addStore(@RequestBody StoreDto.StoreRequest model)",
+      "description": "Creates a store and returns 201 Created with a Location header for the new store resource.",
+      "start_line": 40,
+      "end_line": 46,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PostMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.getStore:3",
+      "file_path": "src/main/java/com/example/app/services/store/controller/StoreController.java",
+      "class_name": "StoreController",
+      "signature": "public ResponseEntity<StoreDto.StoreResponse> getStore(@PathVariable Integer storeId)",
+      "description": "Fetches a store by ID, maps it to a response model, and returns 404 if the store is absent.",
+      "start_line": 48,
+      "end_line": 55,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.updateStore:4",
+      "file_path": "src/main/java/com/example/app/services/store/controller/StoreController.java",
+      "class_name": "StoreController",
+      "signature": "public ResponseEntity<Void> updateStore(@PathVariable Integer storeId, @ModelAttribute StoreDto.StoreRequest model)",
+      "description": "Updates a store by ID using form-bound request data and returns a success response without a body.",
+      "start_line": 57,
+      "end_line": 63,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PutMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.deleteStore:5",
+      "file_path": "src/main/java/com/example/app/services/store/controller/StoreController.java",
+      "class_name": "StoreController",
+      "signature": "public ResponseEntity<Void> deleteStore(@PathVariable Integer storeId)",
+      "description": "Deletes a store by ID and returns 204 No Content.",
+      "start_line": 65,
+      "end_line": 70,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "DeleteMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.getStoreStaffList:6",
+      "file_path": "src/main/java/com/example/app/services/store/controller/StoreController.java",
+      "class_name": "StoreController",
+      "signature": "public ResponseEntity<CollectionModel<StaffDto.StaffResponse>> getStoreStaffList(@PathVariable Integer storeId)",
+      "description": "Returns the staff assigned to a store as a collection model assembled from the service output.",
+      "start_line": 72,
+      "end_line": 77,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.getStoreStaff:7",
+      "file_path": "src/main/java/com/example/app/services/store/controller/StoreController.java",
+      "class_name": "StoreController",
+      "signature": "public ResponseEntity<StaffDto.StaffResponse> getStoreStaff(@PathVariable Integer storeId, @PathVariable Integer staffId)",
+      "description": "Fetches a specific staff member for a store, maps it to a response model, and returns 404 if not found.",
+      "start_line": 79,
+      "end_line": 87,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.addStoreStaff:8",
+      "file_path": "src/main/java/com/example/app/services/store/controller/StoreController.java",
+      "class_name": "StoreController",
+      "signature": "public ResponseEntity<Void> addStoreStaff(@PathVariable Integer storeId, @PathVariable Integer staffId)",
+      "description": "Adds a staff member to a store and returns a generic success response.",
+      "start_line": 89,
+      "end_line": 95,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PostMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.updateStoreStaff:9",
+      "file_path": "src/main/java/com/example/app/services/store/controller/StoreController.java",
+      "class_name": "StoreController",
+      "signature": "public ResponseEntity<Void> updateStoreStaff(@PathVariable Integer storeId, @PathVariable Integer staffId)",
+      "description": "Updates the store-staff association and returns a generic success response.",
+      "start_line": 97,
+      "end_line": 103,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "PutMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.deleteStoreStaff:10",
+      "file_path": "src/main/java/com/example/app/services/store/controller/StoreController.java",
+      "class_name": "StoreController",
+      "signature": "public ResponseEntity<Void> deleteStoreStaff(@PathVariable Integer storeId, @PathVariable Integer staffId)",
+      "description": "Removes a staff member from a store and returns 204 No Content.",
+      "start_line": 105,
+      "end_line": 111,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "DeleteMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.getStoreDetails:11",
+      "file_path": "src/main/java/com/example/app/services/store/controller/StoreController.java",
+      "class_name": "StoreController",
+      "signature": "public ResponseEntity<StoreDetailsDto.StoreDetailsResponse> getStoreDetails(@PathVariable Integer storeId)",
+      "description": "Fetches detailed store information by ID, maps it to a detail response model, and returns 404 if absent.",
+      "start_line": 113,
+      "end_line": 120,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "GetMapping",
+        "Secured"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.SpringRestSakilaApplication#SpringRestSakilaApplication.main:1",
+      "file_path": "src/main/java/com/example/app/SpringRestSakilaApplication.java",
+      "class_name": "SpringRestSakilaApplication",
+      "signature": "public static void main(String[] args)",
+      "description": "Launches the Spring Boot application by delegating to SpringApplication.run with this application class and command-line arguments.",
+      "start_line": 8,
+      "end_line": 10,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": []
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.auth.service.JpaUserDetailsService#JpaUserDetailsService.findUser:2",
+      "file_path": "src/main/java/com/example/app/services/auth/service/JpaUserDetailsService.java",
+      "class_name": "JpaUserDetailsService",
+      "signature": "public UserDetails findUser(String email, String password)",
+      "description": "Loads the user by email and validates the supplied password with the password encoder, returning the user on success or throwing an IllegalArgumentException on mismatch.",
+      "start_line": 30,
+      "end_line": 37,
+      "cyclomatic_complexity": 2,
+      "complexity_rating": "low",
+      "annotations": [
+        "Transactional"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.auth.service.JpaUserDetailsService#JpaUserDetailsService.loadUserByUsername:1",
+      "file_path": "src/main/java/com/example/app/services/auth/service/JpaUserDetailsService.java",
+      "class_name": "JpaUserDetailsService",
+      "signature": "public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException",
+      "description": "Looks up a user record by email, then adapts the stored email, password, and authorities into a Spring Security UserDetails instance.",
+      "start_line": 19,
+      "end_line": 28,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "Override",
+        "Transactional"
+      ]
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.auth.service.SecurityService#SecurityService.authenticateToken:1",
+      "file_path": "src/main/java/com/example/app/services/auth/service/SecurityService.java",
+      "class_name": "SecurityService",
+      "signature": "public void authenticateToken(UserDetails user, String jwt)",
+      "description": "Wraps the supplied user details and JWT into a JwtAuthenticationToken and passes it to the authentication manager.",
+      "start_line": 14,
+      "end_line": 17,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": []
+    },
+    {
+      "method_id": "src.main.java.com.example.app.services.catalog.domain.mapper.ActorMapper#ActorMapper.mapToDto:1",
+      "file_path": "src/main/java/com/example/app/services/catalog/domain/mapper/ActorMapper.java",
+      "class_name": "ActorMapper",
+      "signature": "ActorDto.Actor mapToDto(ActorEntity entity)",
+      "description": "Maps an ActorEntity into an ActorDto.Actor, including actorId and nested first/last name fields.",
+      "start_line": 13,
+      "end_line": 17,
+      "cyclomatic_complexity": 1,
+      "complexity_rating": "low",
+      "annotations": [
+        "Override",
+        "Mapping",
+        "Mapping",
+        "Mapping"
+      ]
+    }
+  ],
+  "analyzed_file_summaries": [
+    {
+      "chunk_id": "README.md::part-1",
+      "purpose": "Project overview and setup documentation for the Sakila REST API service.",
+      "responsibilities": [
+        "Describes the application scope: CRUD and query access to the Sakila sample database.",
+        "Lists runtime requirements, major libraries, and external MySQL setup expectations.",
+        "Documents installation, build, run, API documentation, observability, and sample data information."
+      ],
+      "noteworthy_aspects": [
+        "Relies on an external MySQL Sakila database rather than an embedded datastore.",
+        "Highlights Spring Boot Actuator and Micrometer exposure for observability.",
+        "References generated OpenAPI/Swagger and Postman artifacts produced from Spring REST Docs."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "build.gradle.kts::part-1",
+      "purpose": "Gradle build configuration for plugins, dependency management, documentation generation, and task wiring.",
+      "responsibilities": [
+        "Applies Java, Kotlin, Spring Boot, dependency-management, Asciidoctor, and REST docs spec plugins.",
+        "Declares application, test, documentation, JJWT, Querydsl, Blaze-Persistence, Lombok, MapStruct, MySQL, and Prometheus dependencies.",
+        "Configures OpenAPI and Postman spec generation metadata and ties build tasks together."
+      ],
+      "noteworthy_aspects": [
+        "Uses Kotlin JVM toolchain targeting Java 17.",
+        "Configures tests to emit REST Docs snippets into a shared snippets directory consumed by Asciidoctor.",
+        "Build depends on documentation/spec generation tasks, and Asciidoctor runs in a forked JVM with module opens."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "settings.gradle.kts::part-1",
+      "purpose": "Gradle settings and repository policy definition for the multi-plugin build.",
+      "responsibilities": [
+        "Defines plugin management and dependency resolution repositories.",
+        "Forces project repositories to be declared centrally rather than in subprojects.",
+        "Sets the root project name."
+      ],
+      "noteworthy_aspects": [
+        "Uses Maven Central, Google, and the Gradle Plugin Portal for plugin resolution.",
+        "Disallows repositories in subprojects via FAIL_ON_PROJECT_REPOS."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "gradle/libs.versions.toml::part-1",
+      "purpose": "Central version catalog for dependency and plugin aliases used by the build.",
+      "responsibilities": [
+        "Pins versions for frameworks, libraries, and plugins.",
+        "Maps alias names to Maven coordinates and plugin IDs.",
+        "Groups dependencies for Spring, testing, REST docs, query tooling, persistence tooling, and utility libraries."
+      ],
+      "noteworthy_aspects": [
+        "Contains coordinated versions for Spring Boot, Spring Security, Querydsl, Blaze-Persistence, JJWT, MapStruct, and Kotlin plugins.",
+        "Includes commented-out entries for optional tools such as Spotless and Spring OAuth2/devtools."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "src/main/resources/application.yaml::part-1",
+      "purpose": "Application runtime configuration for server, database, cache, logging, management, and JWT settings.",
+      "responsibilities": [
+        "Configures HTTP server port and base context path.",
+        "Defines MySQL datasource and JPA behavior.",
+        "Configures Redis connection, connection pool settings, logging level, actuator exposure, and JWT signing key property."
+      ],
+      "noteworthy_aspects": [
+        "Uses HikariCP with fixed pool sizing and timeout settings.",
+        "Sets JPA schema validation and explicit naming strategies.",
+        "Exposes only health and Prometheus actuator endpoints on the web layer."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/auth/controller/LoginController.java::part-1",
+      "purpose": "Authentication entry point that exchanges login credentials for a JWT-backed authenticated session.",
+      "responsibilities": [
+        "Accepts login requests on the /login endpoint.",
+        "Delegates credential verification to the user details service.",
+        "Creates a JWT and registers the authentication token through the security service before returning it in the Authorization header."
+      ],
+      "noteworthy_aspects": [
+        "Returns HTTP 200 with a Bearer token header rather than a response body.",
+        "The method is a simple linear flow with no conditional branches.",
+        "Depends on injected services for user lookup, token creation, and authentication state update."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "src.main.java.com.example.app.services.auth.controller.LoginController#LoginController.userLogin:1",
+          "description": "Authenticates the supplied login credentials, issues a JWT, records the authenticated token, and returns the token in the response headers."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/rental/controller/RentalController.java::part-1",
+      "purpose": "REST controller for rental management operations and rental return processing.",
+      "responsibilities": [
+        "Exposes rental list, read, update, delete, create, and return endpoints under /rentals.",
+        "Applies role-based access control for management operations.",
+        "Adapts service-layer rental results into HATEOAS collection or entity responses."
+      ],
+      "noteworthy_aspects": [
+        "Sets a default rental date on create and default return date on return when the client omits them.",
+        "Uses `linkTo(methodOn(...))` to build Location headers for created rentals.",
+        "Return processing accepts a map payload and mutates it to fill missing returnDate."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "src.main.java.com.example.app.services.rental.controller.RentalController#RentalController.rentDvd:2",
+          "description": "Creates a new rental, supplying the current timestamp when the request omits rentalDate, and returns a 201 Created response pointing to the created rental."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.rental.controller.RentalController#RentalController.returnDvd:6",
+          "description": "Processes a rental return request, filling in returnDate when absent, delegating to the rental service, and returning an OK response."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.rental.controller.RentalController#RentalController.getRentalList:1",
+          "description": "Returns a paginated HATEOAS collection of rentals for management users."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.rental.controller.RentalController#RentalController.getRental:3",
+          "description": "Fetches a rental by ID and returns it when present, otherwise responds with 404."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.rental.controller.RentalController#RentalController.updateRental:4",
+          "description": "Updates an existing rental and returns an OK response."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.rental.controller.RentalController#RentalController.deleteRental:5",
+          "description": "Deletes a rental by ID and returns 204 No Content."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/catalog/controller/ActorController.java::part-1",
+      "purpose": "REST controller for actor CRUD plus actor-film relationship and detail views.",
+      "responsibilities": [
+        "Exposes actor list, create, read, update, delete, and detail endpoints under /actors.",
+        "Manages actor-to-film association endpoints for listing, adding, reading, and removing films.",
+        "Builds HATEOAS links for actor, film, and film-list navigation and supports filtered film listing."
+      ],
+      "noteworthy_aspects": [
+        "Converts optional query parameters into a structured film filter using category, release year, and rating parsing.",
+        "Uses different assemblers for actor, actor details, film, and film details representations.",
+        "Adds relation links such as actor, film, and filmList to returned representations after stripping existing links."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.getActorList:1",
+          "description": "Returns a paginated HATEOAS collection of actors for read users."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.addActor:2",
+          "description": "Creates an actor and returns a 201 Created response pointing to the new actor resource."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.getActor:3",
+          "description": "Fetches an actor by ID and returns 404 when it is missing."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.updateActor:4",
+          "description": "Updates an actor by ID and returns OK."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.deleteActor:5",
+          "description": "Deletes an actor by ID and returns 204 No Content."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.getActorDetails:6",
+          "description": "Fetches detailed actor information and returns it when present."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.getActorFilmList:7",
+          "description": "Returns a filtered, paginated HATEOAS collection of films associated with an actor and adds self, actor, and film-list links."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.addActorFilm:8",
+          "description": "Associates a film with an actor and returns a Location header for the created association resource."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.getActorFilm:9",
+          "description": "Fetches a specific film linked to an actor and enriches the response with navigation links."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.deleteActorFilm:10",
+          "description": "Removes a film association from an actor and returns 204 No Content."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.getActorFilmDetails:11",
+          "description": "Fetches detailed information for a film associated with an actor and adds navigation links."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.controller.ActorController#ActorController.searchActorByName:12",
+          "description": "Searches actors by name and returns the matching collection as HATEOAS resources."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/catalog/controller/FilmController.java::part-1",
+      "purpose": "REST controller for film CRUD plus film-actor browsing and detail views.",
+      "responsibilities": [
+        "Exposes film list, create, read, update, delete, detail, and actor listing endpoints under /films.",
+        "Supports filtering film lists by category, release year, and rating.",
+        "Returns actor and film detail representations through dedicated assemblers."
+      ],
+      "noteworthy_aspects": [
+        "Builds filter options from optional request parameters using category mapping and enum parsing.",
+        "Uses HATEOAS collection models for list endpoints and plain entity responses for single-resource lookups.",
+        "Separates film detail rendering from film list rendering via distinct assemblers."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.controller.FilmController#FilmController.getFilmList:1",
+          "description": "Returns a paginated, optionally filtered HATEOAS collection of films."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.controller.FilmController#FilmController.addFilm:2",
+          "description": "Creates a film and returns a 201 Created response pointing to the created film resource."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.controller.FilmController#FilmController.getFilm:3",
+          "description": "Fetches a film by ID and returns 404 when absent."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.controller.FilmController#FilmController.updateFilm:4",
+          "description": "Updates a film by ID and returns OK."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.controller.FilmController#FilmController.deleteFilm:5",
+          "description": "Deletes a film by ID and returns 204 No Content."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.controller.FilmController#FilmController.getFilmActorList:6",
+          "description": "Returns a paginated HATEOAS collection of actors associated with a film."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.controller.FilmController#FilmController.getFilmActor:7",
+          "description": "Fetches a specific actor associated with a film and returns it when found."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.controller.FilmController#FilmController.getFilmDetails:8",
+          "description": "Fetches detailed information for a film and returns it when available."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/customer/controller/CustomerController.java::part-1",
+      "purpose": "REST controller for customer CRUD plus customer-related payment and rental views.",
+      "responsibilities": [
+        "Exposes customer list, create, read, update, delete, and detail endpoints under /customers.",
+        "Provides customer payment and rental list endpoints with optional date/status filters.",
+        "Converts rental status strings to an enum before delegating to the service layer."
+      ],
+      "noteworthy_aspects": [
+        "Applies management role security to all endpoints in this controller.",
+        "Payment list passes raw date strings through to the service, while rental list normalizes status casing to an enum value.",
+        "Uses separate assemblers for customer details, payments, and rentals."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "src.main.java.com.example.app.services.customer.controller.CustomerController#CustomerController.getCustomerList:1",
+          "description": "Returns a paginated HATEOAS collection of customers."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.customer.controller.CustomerController#CustomerController.addCustomer:2",
+          "description": "Creates a customer and returns a 201 Created response pointing to the new customer resource."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.customer.controller.CustomerController#CustomerController.getCustomer:3",
+          "description": "Fetches a customer by ID and returns 404 when missing."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.customer.controller.CustomerController#CustomerController.updateCustomer:4",
+          "description": "Updates a customer by ID and returns OK."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.customer.controller.CustomerController#CustomerController.deleteCustomer:5",
+          "description": "Deletes a customer by ID and returns 204 No Content."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.customer.controller.CustomerController#CustomerController.getCustomerDetails:6",
+          "description": "Fetches detailed customer information and returns it when present."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.customer.controller.CustomerController#CustomerController.getCustomerPaymentList:7",
+          "description": "Returns a HATEOAS collection of payments for a customer, filtered by optional start and end dates."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.customer.controller.CustomerController#CustomerController.getCustomerRentalList:8",
+          "description": "Returns a HATEOAS collection of rentals for a customer, optionally filtered by rental status and date range."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/location/controller/LocationController.java::part-1",
+      "purpose": "REST controller for address and city CRUD operations within the location domain.",
+      "responsibilities": [
+        "Exposes address list, create, read, update, delete, and detail endpoints under /location/addresses.",
+        "Exposes city list, create, read, update, and delete endpoints under /location/cities.",
+        "Transforms service results into HATEOAS collection or entity responses using address and city assemblers."
+      ],
+      "noteworthy_aspects": [
+        "Separates address and city resource handling within the same controller.",
+        "Uses created-response Location headers for both address and city creation.",
+        "Applies read/manage role restrictions to distinguish retrieval from modification operations."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.getAddressList:1",
+          "description": "Returns a paginated HATEOAS collection of addresses."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.addAddress:2",
+          "description": "Creates an address and returns a 201 Created response pointing to the new address resource."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.getAddress:3",
+          "description": "Fetches an address by ID and returns 404 when absent."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.updateAddress:4",
+          "description": "Updates an address by ID and returns OK."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.deleteAddress:5",
+          "description": "Deletes an address by ID and returns 204 No Content."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.getAddressDetails:6",
+          "description": "Fetches detailed address information and returns it when available."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.getCityList:7",
+          "description": "Returns a paginated HATEOAS collection of cities."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.addCity:8",
+          "description": "Creates a city and returns a 201 Created response pointing to the new city resource."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.getCity:9",
+          "description": "Fetches a city by ID and returns 404 when absent."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.updateCity:10",
+          "description": "Updates a city by ID and returns OK."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.location.controller.LocationController#LocationController.deleteCity:11",
+          "description": "Deletes a city by ID and returns 204 No Content."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/payment/controller/PaymentController.java::part-1",
+      "purpose": "REST controller for payment lookup, update, deletion, and detailed payment views.",
+      "responsibilities": [
+        "Exposes payment list, read, update, delete, and detail endpoints under /payments.",
+        "Returns HATEOAS collections for payment lists and mapped entities for single-payment retrieval.",
+        "Enforces management role access for all payment operations."
+      ],
+      "noteworthy_aspects": [
+        "Uses the same assembler for list and single-item responses.",
+        "Follow-up detail lookup returns a payment representation rather than a separate detail type.",
+        "All methods are straightforward service delegations with not-found handling on reads."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "src.main.java.com.example.app.services.payment.controller.PaymentController#PaymentController.getPaymentList:1",
+          "description": "Returns a paginated HATEOAS collection of payments."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.payment.controller.PaymentController#PaymentController.getPayment:2",
+          "description": "Fetches a payment by ID and returns 404 when absent."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.payment.controller.PaymentController#PaymentController.updatePayment:3",
+          "description": "Updates a payment by ID and returns OK."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.payment.controller.PaymentController#PaymentController.deletePayment:4",
+          "description": "Deletes a payment by ID and returns 204 No Content."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.payment.controller.PaymentController#PaymentController.getPaymentDetails:5",
+          "description": "Fetches detailed payment information and returns it when available."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/staff/controller/StaffController.java::part-1",
+      "purpose": "Spring REST controller for staff management endpoints.",
+      "responsibilities": [
+        "Expose staff list, create, read, update, delete, and details endpoints under /staffs.",
+        "Delegate persistence and retrieval work to StaffService.",
+        "Convert service results to HATEOAS collection or entity responses using staff assemblers.",
+        "Enforce role-based access with @Secured."
+      ],
+      "noteworthy_aspects": [
+        "Uses PageableDefault to supply default pagination for list retrieval.",
+        "Creates POST Location headers by linking to the newly created staff resource.",
+        "Returns 404 when staff or staff details are absent from the service lookup.",
+        "Mixes list and detail assemblers to shape different response types."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "src.main.java.com.example.app.services.staff.controller.StaffController#StaffController.getStaffList:1",
+          "description": "Returns a paginated collection of staff representations assembled from the service-provided staff list."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.staff.controller.StaffController#StaffController.addStaff:2",
+          "description": "Creates a staff record via the service and returns 201 Created with a Location header pointing to the new staff resource."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.staff.controller.StaffController#StaffController.getStaff:3",
+          "description": "Fetches a single staff record by ID, maps it to a response model, and returns 404 if not found."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.staff.controller.StaffController#StaffController.updateStaff:4",
+          "description": "Updates a staff record by ID through the service and returns a success response without a body."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.staff.controller.StaffController#StaffController.deleteStaff:5",
+          "description": "Deletes a staff record by ID through the service and returns 204 No Content."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.staff.controller.StaffController#StaffController.getStaffDetails:6",
+          "description": "Fetches detailed staff information by ID, maps it to a detail response model, and returns 404 if absent."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/store/controller/ReportController.java::part-1",
+      "purpose": "REST controller that exposes reporting endpoints for store sales summaries.",
+      "responsibilities": [
+        "Expose category-based and store-based sales report endpoints under /reports.",
+        "Delegate report generation to ReportService.",
+        "Convert report projections into HATEOAS collection responses using assemblers.",
+        "Restrict access to management-role users."
+      ],
+      "noteworthy_aspects": [
+        "Contains only read-only GET endpoints.",
+        "Both endpoints return collection models, indicating aggregated report output rather than single resources.",
+        "The controller is thin and performs no transformation beyond service delegation and assembly."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "src.main.java.com.example.app.services.store.controller.ReportController#ReportController.reportSalesByCategory:1",
+          "description": "Returns a collection of sales-by-category report responses assembled from the report service output."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.store.controller.ReportController#ReportController.reportSalesByStore:2",
+          "description": "Returns a collection of sales-by-store report responses assembled from the report service output."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/store/controller/StoreController.java::part-1",
+      "purpose": "Spring REST controller for store management and store-staff association endpoints.",
+      "responsibilities": [
+        "Expose store CRUD endpoints under /stores.",
+        "Expose store staff listing and relationship management endpoints.",
+        "Return store and staff representations through HATEOAS assemblers.",
+        "Delegate all business operations to StoreService.",
+        "Enforce role-based access with @Secured."
+      ],
+      "noteworthy_aspects": [
+        "Supports nested resource paths for store staff membership management.",
+        "Uses PageableDefault for default paging on the store list endpoint.",
+        "Creates Location headers for newly created stores using a self-referential link.",
+        "Some update/add relationship methods ignore returned service results and only return generic success responses.",
+        "The store update endpoint binds request data with @ModelAttribute rather than @RequestBody."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.getStoreList:1",
+          "description": "Returns a paginated collection of store representations assembled from the service-provided store list."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.addStore:2",
+          "description": "Creates a store and returns 201 Created with a Location header for the new store resource."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.getStore:3",
+          "description": "Fetches a store by ID, maps it to a response model, and returns 404 if the store is absent."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.updateStore:4",
+          "description": "Updates a store by ID using form-bound request data and returns a success response without a body."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.deleteStore:5",
+          "description": "Deletes a store by ID and returns 204 No Content."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.getStoreStaffList:6",
+          "description": "Returns the staff assigned to a store as a collection model assembled from the service output."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.getStoreStaff:7",
+          "description": "Fetches a specific staff member for a store, maps it to a response model, and returns 404 if not found."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.addStoreStaff:8",
+          "description": "Adds a staff member to a store and returns a generic success response."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.updateStoreStaff:9",
+          "description": "Updates the store-staff association and returns a generic success response."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.deleteStoreStaff:10",
+          "description": "Removes a staff member from a store and returns 204 No Content."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.store.controller.StoreController#StoreController.getStoreDetails:11",
+          "description": "Fetches detailed store information by ID, maps it to a detail response model, and returns 404 if absent."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/auth/service/SecurityService.java::part-1",
+      "purpose": "Authentication helper that delegates JWT token authentication to Spring Security.",
+      "responsibilities": [
+        "Build a JWT authentication token from a user principal and raw JWT string.",
+        "Submit the token to the configured AuthenticationManager for authentication."
+      ],
+      "noteworthy_aspects": [
+        "Does not itself validate or decode the JWT; it relies on the authentication manager chain.",
+        "Uses the user's username and authorities when constructing the authentication token."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "src.main.java.com.example.app.services.auth.service.SecurityService#SecurityService.authenticateToken:1",
+          "description": "Wraps the supplied user details and JWT into a JwtAuthenticationToken and passes it to the authentication manager."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/common/security/JwtAuthenticationProvider.java::part-1",
+      "purpose": "Spring Security authentication provider for JWT-backed authentication tokens.",
+      "responsibilities": [
+        "Support JwtAuthenticationToken authentication requests.",
+        "Decode and inspect JWT claims via JwtTokenProvider.",
+        "Translate token authorities claims into GrantedAuthority instances.",
+        "Return an authenticated token when decoding succeeds."
+      ],
+      "noteworthy_aspects": [
+        "Returns null when token decoding fails, which signals authentication failure to the security framework.",
+        "Maps authority strings to UserRole values before adding them to the authority list.",
+        "Implements supports() narrowly for JwtAuthenticationToken only."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/catalog/service/ActorServiceImpl.java::part-1",
+      "purpose": "Service-layer implementation for actor retrieval, mutation, and actor-film relationship operations.",
+      "responsibilities": [
+        "Fetch actor lists, actor details, and related film data from the repository.",
+        "Create, update, and delete actors with mapper-based entity conversion.",
+        "Manage actor-film association queries and mutations.",
+        "Apply read-only transactions and caching for selected actor lookups and updates."
+      ],
+      "noteworthy_aspects": [
+        "Throws ResourceNotFoundException when expected actor data is missing.",
+        "Uses @Cacheable/@CachePut/@CacheEvict around single-actor read/write operations.",
+        "Delegates all persistence logic to ActorRepository and object conversion to ActorMapper.",
+        "Several lookup methods return Optional but still throw on missing data before returning."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/catalog/service/FilmServiceImpl.java::part-1",
+      "purpose": "Service-layer implementation for film retrieval, filtering, and CRUD operations.",
+      "responsibilities": [
+        "Provide film list queries with optional filtering and pagination.",
+        "Fetch film details, actors, and rental price information.",
+        "Create, update, and delete films with mapper-based entity conversion.",
+        "Use caching for single-film read/update/delete operations."
+      ],
+      "noteworthy_aspects": [
+        "Chooses between filtered and unfiltered list queries based on whether all filter fields are null.",
+        "Retrieves rental price as a BigDecimal and treats a null rental rate as not found.",
+        "Uses cache annotations around single-film access similar to actor service behavior.",
+        "Returns related actor views directly from repository projections for association lookups."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/customer/service/CustomerServiceImpl.java::part-1",
+      "purpose": "Service-layer implementation for customer retrieval, detail queries, and CRUD operations.",
+      "responsibilities": [
+        "Fetch paginated customer lists and individual customers.",
+        "Expose customer detail, payment, and rental history queries.",
+        "Create, update, and delete customers with mapper-based entity conversion."
+      ],
+      "noteworthy_aspects": [
+        "Parses start and end date strings into LocalDate before querying payment or rental history.",
+        "Throws ResourceNotFoundException when customer data is missing in single-entity and detail lookups.",
+        "Delegates all persistence operations to CustomerRepository and conversion to CustomerMapper."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/location/service/LocationServiceImpl.java::part-1",
+      "purpose": "Service-layer implementation for address and city retrieval and CRUD operations.",
+      "responsibilities": [
+        "Provide paginated address and city lists.",
+        "Fetch address and city entities and their detail views.",
+        "Create, update, and delete addresses and cities with mapper-based entity conversion."
+      ],
+      "noteworthy_aspects": [
+        "Contains two parallel CRUD flows, one for addresses and one for cities.",
+        "Uses separate repositories and mappers for address and city domains.",
+        "Throws ResourceNotFoundException when a requested address or city is absent."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/payment/service/PaymentServiceImpl.java::part-1",
+      "purpose": "Service-layer implementation for payment retrieval, detail queries, and CRUD operations.",
+      "responsibilities": [
+        "Provide paginated payment lists and payment detail views.",
+        "Create payment records from payment request data plus related customer, staff, and rental objects.",
+        "Update and delete payments with mapper-based entity conversion."
+      ],
+      "noteworthy_aspects": [
+        "Builds a PaymentDto.Payment model manually before mapping it back to an entity for persistence.",
+        "Populate relationships on creation using provided customer, staff, and rental domain objects.",
+        "Throws ResourceNotFoundException when payment lookup results are missing."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/rental/service/RentalServiceImpl.java::part-1",
+      "purpose": "Service-layer implementation for rental checkout, return processing, retrieval, and CRUD operations.",
+      "responsibilities": [
+        "Provide rental list and single-rental queries.",
+        "Handle DVD rental by checking inventory, loading related entities, saving a rental, and creating a payment.",
+        "Handle DVD return by locating an active rental and updating it with a return date.",
+        "Update and delete rentals through the repository."
+      ],
+      "noteworthy_aspects": [
+        "rentDvd coordinates multiple services: store, customer, staff, film, and payment.",
+        "Uses ResourceNotAvailableException when inventory is unavailable or no active rental is found.",
+        "returnDvd parses customer ID, inventory ID, and return date from a string map, then updates the matched rental.",
+        "getOverdueRentalList and getOverdueRental currently return null, indicating unimplemented behavior in this chunk."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/staff/service/StaffServiceImpl.java::part-1",
+      "purpose": "Service-layer implementation for staff retrieval, detail queries, and CRUD operations.",
+      "responsibilities": [
+        "Provide paginated staff lists and single staff lookups.",
+        "Expose staff detail views from repository projections.",
+        "Create, update, and delete staff records with mapper-based entity conversion."
+      ],
+      "noteworthy_aspects": [
+        "Throws ResourceNotFoundException when staff records or details are missing.",
+        "Uses a dedicated StaffMapper for DTO/entity conversion.",
+        "The service is read-only for retrieval operations and transactional for mutations."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/store/service/StoreServiceImpl.java::part-1",
+      "purpose": "Implements store-related application services, coordinating repositories and mappers to read, create, update, and delete store data plus related staff and inventory views.",
+      "responsibilities": [
+        "Fetch paged store lists and map entities to DTOs.",
+        "Load individual store and store-details views, raising a not-found exception when absent.",
+        "Expose staff and inventory lookup operations scoped by store.",
+        "Persist new stores and update existing store entities within transactions.",
+        "Delete stores via the repository."
+      ],
+      "noteworthy_aspects": [
+        "Uses read-only transactions for query methods and standard transactions for mutations.",
+        "Relies on repository projection/query methods such as store details, staff lists, and inventory lookups.",
+        "Several staff-mutating methods are stubbed and currently return null or do nothing.",
+        "Update logic loads the entity first, then applies an in-place update via the entity's update method before mapping back to DTO."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/common/security/JwtAuthenticationToken.java::part-1",
+      "purpose": "Defines a Spring Security authentication token type for JWT-based authentication results and bearer-token input.",
+      "responsibilities": [
+        "Represent an authenticated JWT principal with access token, email, and authorities.",
+        "Represent an unauthenticated token carrying only the raw access token for authentication processing.",
+        "Expose credentials and principal values to Spring Security."
+      ],
+      "noteworthy_aspects": [
+        "One constructor marks the token authenticated and supplies authorities; the other creates an unauthenticated token with no principal.",
+        "Credentials are the access token string, while principal is the email for authenticated instances."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/common/security/JwtTokenProvider.java::part-1",
+      "purpose": "Creates and parses JWTs using a configured signing key.",
+      "responsibilities": [
+        "Initialize the HMAC signing key from application configuration.",
+        "Build JWT claims from a UserDetails principal, including email, authorities, and issue time.",
+        "Decode and validate signed JWTs to extract claims."
+      ],
+      "noteworthy_aspects": [
+        "Uses a post-construction initialization step to derive the SecretKey from the configured signing string.",
+        "Tokens are issued with a timestamp in the Asia/Seoul time zone.",
+        "Authority values are stored directly in the claims collection."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/store/service/ReportServiceImpl.java::part-1",
+      "purpose": "Provides sales reporting operations for store analytics.",
+      "responsibilities": [
+        "Return sales summaries grouped by category.",
+        "Return sales summaries grouped by store."
+      ],
+      "noteworthy_aspects": [
+        "This service is a thin transactional facade over payment repository aggregation queries.",
+        "Both methods are read-only and delegate directly to repository calculations."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/common/security/JwtAuthenticationFilter.java::part-1",
+      "purpose": "Intercepts HTTP requests to authenticate bearer tokens before the request reaches protected endpoints.",
+      "responsibilities": [
+        "Extract the Authorization header from incoming requests.",
+        "Recognize Bearer tokens, wrap them in an authentication token, and authenticate through the AuthenticationManager.",
+        "Store successful authentication in the SecurityContext and continue the filter chain.",
+        "Skip filtering for the login path."
+      ],
+      "noteworthy_aspects": [
+        "Runs once per request and is inserted before UsernamePasswordAuthenticationFilter in the security chain.",
+        "Authentication is only attempted when the header is present and starts with the Bearer prefix.",
+        "The filter bypasses requests whose servlet path equals /login."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/SpringRestSakilaApplication.java::part-1",
+      "purpose": "Bootstraps the Spring Boot application.",
+      "responsibilities": [
+        "Start the application context from the main entry point."
+      ],
+      "noteworthy_aspects": [
+        "Contains the standard Spring Boot launcher with no additional startup logic."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "src.main.java.com.example.app.SpringRestSakilaApplication#SpringRestSakilaApplication.main:1",
+          "description": "Launches the Spring Boot application by delegating to SpringApplication.run with this application class and command-line arguments."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/config/AuthConfig.java::part-1",
+      "purpose": "Defines authentication-related Spring configuration beans.",
+      "responsibilities": [
+        "Provide a BCrypt password encoder bean.",
+        "Assemble an AuthenticationManager backed by the JWT authentication provider."
+      ],
+      "noteworthy_aspects": [
+        "Uses ProviderManager with a single injected JWT provider.",
+        "Password encoding is centrally configured through BCrypt."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/config/SecurityFilterConfig.java::part-1",
+      "purpose": "Configures HTTP security for the application.",
+      "responsibilities": [
+        "Require authentication for all endpoints except /login.",
+        "Enforce stateless session handling.",
+        "Disable CSRF, CORS, and form login.",
+        "Register the JWT authentication filter before username/password authentication processing."
+      ],
+      "noteworthy_aspects": [
+        "Enables method-level security with secured annotations.",
+        "The security chain is configured for bearer-token style stateless access."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/auth/service/JpaUserDetailsService.java::part-1",
+      "purpose": "Loads user authentication data from persistence and validates submitted credentials.",
+      "responsibilities": [
+        "Load a Spring Security UserDetails object by username/email from the authority repository.",
+        "Compare a raw password against the stored password hash.",
+        "Signal invalid credentials when password verification fails."
+      ],
+      "noteworthy_aspects": [
+        "The username lookup delegates to the authority repository and builds a Spring Security User instance from the returned entity.",
+        "Password verification uses the configured PasswordEncoder.",
+        "A missing user is not handled explicitly here and would depend on repository behavior."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "src.main.java.com.example.app.services.auth.service.JpaUserDetailsService#JpaUserDetailsService.loadUserByUsername:1",
+          "description": "Looks up a user record by email, then adapts the stored email, password, and authorities into a Spring Security UserDetails instance."
+        },
+        {
+          "method_id": "src.main.java.com.example.app.services.auth.service.JpaUserDetailsService#JpaUserDetailsService.findUser:2",
+          "description": "Loads the user by email and validates the supplied password with the password encoder, returning the user on success or throwing an IllegalArgumentException on mismatch."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/catalog/domain/mapper/ActorMapper.java::part-1",
+      "purpose": "Maps between actor entities and DTOs for the catalog domain.",
+      "responsibilities": [
+        "Convert actor entities to nested actor DTOs.",
+        "Convert actor request DTOs into actor entities with a fresh lastUpdate timestamp."
+      ],
+      "noteworthy_aspects": [
+        "Uses MapStruct with Spring component generation.",
+        "Nested fullName fields are mapped explicitly in both directions.",
+        "Entity creation sets lastUpdate to the current time and ignores actorId so persistence can assign it."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "src.main.java.com.example.app.services.catalog.domain.mapper.ActorMapper#ActorMapper.mapToDto:1",
+          "description": "Maps an ActorEntity into an ActorDto.Actor, including actorId and nested first/last name fields."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/catalog/domain/mapper/FilmMapper.java::part-1",
+      "purpose": "Maps film entities and request DTOs for the catalog domain.",
+      "responsibilities": [
+        "Convert film entities to DTOs while omitting language relationship references.",
+        "Convert film request DTOs to entities with updated timestamps and ignored relationship fields."
+      ],
+      "noteworthy_aspects": [
+        "The mapper explicitly ignores both language relationship associations in both directions.",
+        "Entity creation sets lastUpdate to the current time and leaves filmId unset for persistence."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/customer/domain/mapper/CustomerMapper.java::part-1",
+      "purpose": "Maps customer entities and request DTOs for the customer domain.",
+      "responsibilities": [
+        "Convert customer entities to DTOs while excluding several relationship fields.",
+        "Convert customer request DTOs to entities with nested name mapping and a current lastUpdate timestamp."
+      ],
+      "noteworthy_aspects": [
+        "The mapper ignores store, address, and authority associations in both directions.",
+        "CreateDate is ignored on entity mapping, suggesting it is managed elsewhere or by persistence.",
+        "Nested first/last name fields are mapped into a fullName structure."
+      ],
+      "method_descriptions": []
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/location/domain/mapper/AddressMapper.java::part-1",
+      "purpose": "MapStruct mapper for converting between Address entities and DTO/request models in the location service.",
+      "responsibilities": [
+        "Maps AddressEntity to AddressDto.Address while omitting the nested city association.",
+        "Maps AddressDto.AddressRequest to AddressEntity for persistence.",
+        "Uses MapStruct with Spring component generation and LocalDateTime support for timestamp population."
+      ],
+      "noteworthy_aspects": [
+        "The entity-to-DTO mapping explicitly ignores cityByCityId, indicating nested relation loading is handled elsewhere.",
+        "The request-to-entity mapping sets lastUpdate to the current time and ignores the generated identifier and city relation.",
+        "Extends GenericMapper, so it participates in a shared mapping contract across the codebase."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "mapToDto(AddressEntity entity)",
+          "description": "Converts an AddressEntity to an AddressDto.Address and excludes the city association from the mapped output."
+        },
+        {
+          "method_id": "mapToEntity(AddressDto.AddressRequest dto)",
+          "description": "Converts an Address request DTO into an AddressEntity, leaving the primary key unset, stamping lastUpdate, and ignoring the city association."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/location/domain/mapper/CityMapper.java::part-1",
+      "purpose": "MapStruct mapper for City entity-to-DTO and request-to-entity conversion in the location service.",
+      "responsibilities": [
+        "Defines the CityEntity to CityDto.City projection contract through GenericMapper.",
+        "Creates CityEntity instances from CityDto.CityRequest payloads.",
+        "Applies timestamp initialization during entity creation."
+      ],
+      "noteworthy_aspects": [
+        "The mapping ignores countryByCountryId, so country linkage is not populated here.",
+        "The generated entity mapping sets lastUpdate using the current time.",
+        "No custom DTO mapping method is declared in this chunk beyond the inherited contract and the request mapper."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "mapToEntity(CityDto.CityRequest dto)",
+          "description": "Builds a CityEntity from a City creation request, omitting the identifier and country relation and setting lastUpdate to now."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/payment/domain/mapper/PaymentMapper.java::part-1",
+      "purpose": "MapStruct mapper for Payment domain objects, focusing on request-to-entity creation.",
+      "responsibilities": [
+        "Converts PaymentDto.PaymentRequest into PaymentEntity.",
+        "Leaves relational associations unresolved for later handling.",
+        "Populates audit timestamp fields during mapping."
+      ],
+      "noteworthy_aspects": [
+        "The mapper ignores customer, staff, and rental associations, suggesting those foreign keys are attached elsewhere.",
+        "The identifier is ignored and lastUpdate is assigned at mapping time.",
+        "Extends GenericMapper, but only the create-path method is explicitly defined here."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "mapToEntity(PaymentDto.PaymentRequest dto)",
+          "description": "Creates a PaymentEntity from a payment request, excluding the generated id and linked customer/staff/rental references while setting lastUpdate to the current time."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/rental/domain/mapper/RentalMapper.java::part-1",
+      "purpose": "MapStruct mapper for Rental data, covering DTO/entity conversion and list mapping for rental workflows.",
+      "responsibilities": [
+        "Maps RentalEntity to RentalDto.Rental while omitting related inventory, customer, and staff entities.",
+        "Maps rental DTOs and rental update requests into RentalEntity instances.",
+        "Supports mapping of rental DTO lists with a qualified iterable mapping.",
+        "Provides a specialized rental creation path that omits returnDate."
+      ],
+      "noteworthy_aspects": [
+        "Uses a custom @DoMapping qualifier on the DTO-to-entity conversion, and the list mapping is qualified with that same marker.",
+        "Contains separate mappings for a full rental DTO, an update request, and a rent-specific entity shape.",
+        "The rent-specific mapping ignores returnDate, indicating a create/rent action before return processing."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "mapToDto(RentalEntity entity)",
+          "description": "Converts a RentalEntity to RentalDto.Rental and excludes inventory, customer, and staff associations from the DTO."
+        },
+        {
+          "method_id": "mapToEntity(RentalDto.Rental dto)",
+          "description": "Maps a rental DTO to RentalEntity, ignoring the id and setting lastUpdate to the current time; it is marked with the custom DoMapping qualifier."
+        },
+        {
+          "method_id": "mapToEntity(RentalDto.RentalUpdateRequest dto)",
+          "description": "Converts a rental update request into a RentalEntity while omitting the id, related entities, and setting lastUpdate to now."
+        },
+        {
+          "method_id": "mapToRentEntity(RentalDto.Rental dto)",
+          "description": "Creates a RentalEntity for a rent operation, ignoring the id and returnDate and stamping lastUpdate."
+        },
+        {
+          "method_id": "mapToEntityList(List<RentalDto.Rental> dtoList)",
+          "description": "Maps a list of rental DTOs to rental entities using the DoMapping-qualified element mapping."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/staff/domain/mapper/StaffMapper.java::part-1",
+      "purpose": "MapStruct mapper for staff domain objects, handling staff DTO projection and request creation.",
+      "responsibilities": [
+        "Maps StaffEntity to StaffDto.Staff while excluding related address, store, and authority objects.",
+        "Maps StaffDto.StaffRequest into StaffEntity.",
+        "Splits a request's flat name fields into a nested fullName structure during entity creation."
+      ],
+      "noteworthy_aspects": [
+        "The mapper explicitly populates fullName.firstName and fullName.lastName from top-level request fields.",
+        "Associations to address, store, and authority are ignored, so relationship wiring is deferred.",
+        "lastUpdate is populated using the current time during entity creation."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "mapToDto(StaffEntity entity)",
+          "description": "Converts a StaffEntity to StaffDto.Staff and leaves address, store, and authority associations unmapped."
+        },
+        {
+          "method_id": "mapToEntity(StaffDto.StaffRequest dto)",
+          "description": "Creates a StaffEntity from a staff request, maps first and last name into the nested fullName object, ignores related entities, and sets lastUpdate to now."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/store/domain/mapper/InventoryMapper.java::part-1",
+      "purpose": "MapStruct mapper for inventory read-model conversion in the store service.",
+      "responsibilities": [
+        "Converts InventoryEntity to InventoryDto.Inventory.",
+        "Suppresses related film and store associations in the DTO projection.",
+        "Participates in the shared GenericMapper contract."
+      ],
+      "noteworthy_aspects": [
+        "This chunk only defines the entity-to-DTO path, with no explicit create/update mapping method present here.",
+        "Both filmByFilmId and storeByStoreId are ignored, indicating a lightweight inventory projection.",
+        "No timestamp or identifier customization is shown in this chunk."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "mapToDto(InventoryEntity entity)",
+          "description": "Maps an InventoryEntity to InventoryDto.Inventory while excluding the linked film and store entities."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/store/domain/mapper/StoreMapper.java::part-1",
+      "purpose": "MapStruct mapper for store entity creation from store request data.",
+      "responsibilities": [
+        "Creates StoreEntity objects from StoreDto.StoreRequest.",
+        "Leaves store relationships unresolved during mapping.",
+        "Sets audit timestamps during entity creation."
+      ],
+      "noteworthy_aspects": [
+        "The mapping ignores staffByManagerStaffId and addressByAddressId, so those associations are expected to be resolved separately.",
+        "storeId is ignored and lastUpdate is populated with the current time.",
+        "Implements the GenericMapper contract but only the request-to-entity path is explicitly customized here."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "mapToEntity(StoreDto.StoreRequest dto)",
+          "description": "Builds a StoreEntity from a store request, omitting the generated id and linked manager/address references while setting lastUpdate to now."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/auth/domain/converter/UserRoleConverter.java::part-1",
+      "purpose": "JPA attribute converter between an EnumSet of user roles and a comma-separated database string.",
+      "responsibilities": [
+        "Serializes EnumSet<UserRole> values into a single string column.",
+        "Deserializes stored role strings back into EnumSet<UserRole>.",
+        "Validates non-null input for both conversion directions."
+      ],
+      "noteworthy_aspects": [
+        "Null inputs are rejected with IllegalArgumentException in both directions.",
+        "Database serialization uses UserRole::getAuthority joined by commas, while entity reconstruction uses UserRole.valueOf on each token.",
+        "The converter is registered with @Converter for JPA integration."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "convertToDatabaseColumn(EnumSet<UserRole> attribute)",
+          "description": "Serializes a non-null EnumSet of UserRole values into a comma-separated string using each role's authority value."
+        },
+        {
+          "method_id": "convertToEntityAttribute(String dbData)",
+          "description": "Parses a non-null comma-separated database string into an EnumSet<UserRole> by converting each token to a UserRole enum constant."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/auth/repository/AuthorityRepository.java::part-1",
+      "purpose": "Spring Data JPA repository for AuthorityEntity persistence and lookup.",
+      "responsibilities": [
+        "Provides standard CRUD access through JpaRepository.",
+        "Defines a custom lookup by email for authority records.",
+        "Exposes repository semantics to the Spring container."
+      ],
+      "noteworthy_aspects": [
+        "The repository inherits all JpaRepository operations for AuthorityEntity with Integer IDs.",
+        "The custom finder uses a derived query method name, so its implementation is generated by Spring Data.",
+        "The interface is annotated as a Spring Repository bean."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "findAuthorityEntityByEmail(String email)",
+          "description": "Returns the AuthorityEntity associated with the given email address using a derived Spring Data query method."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/catalog/repository/custom/CustomActorRepositoryImpl.java::part-1",
+      "purpose": "Custom Querydsl/Blaze-Persistence repository implementation for actor-centric catalog queries and actor-film association management.",
+      "responsibilities": [
+        "Fetches actor details with aggregated film titles.",
+        "Fetches actor film lists and individual actor-film projections with optional filters and pagination.",
+        "Fetches detailed film information for a specific actor/film pairing.",
+        "Adds and removes actor-film link records."
+      ],
+      "noteworthy_aspects": [
+        "Uses both JPAQueryFactory and BlazeJPAQueryFactory, mixing standard Querydsl and Blaze-Persistence queries.",
+        "Aggregates related film or actor names with JPQLNextExpressions.groupConcat for denormalized detail views.",
+        "Several methods return Optional.of(query.fetchFirst()), which will fail if the query yields no row because Optional.of does not accept null.",
+        "Filter conditions are applied via filterEquals and some are derived from nested filter fields such as release year and rating.",
+        "The add method performs a direct insert into the join entity before re-querying the association."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "findAllActorDetailsList()",
+          "description": "Returns all actor detail projections with aggregated film information."
+        },
+        {
+          "method_id": "findActorDetailsById(Integer actorId)",
+          "description": "Returns a single actor detail projection for the given actor id."
+        },
+        {
+          "method_id": "findAllActorFilmListByIdWithCondition(Integer actorId, FilmDto.FilterOption condition, Pageable pageable)",
+          "description": "Returns paginated film projections for an actor, applying optional category, release year, and rating filters."
+        },
+        {
+          "method_id": "findActorFilmById(Integer actorId, Integer filmId)",
+          "description": "Returns the film projection for a specific actor and film pairing."
+        },
+        {
+          "method_id": "findActorFilmDetailsById(Integer actorId, Integer filmId)",
+          "description": "Returns detailed film information for a specific actor and film pairing, including aggregated actor names."
+        },
+        {
+          "method_id": "addActorFilm(Integer actorId, Integer filmId)",
+          "description": "Inserts a new actor-film join row and returns the resulting film projection."
+        },
+        {
+          "method_id": "removeActorFilm(Integer actorId, Integer filmId)",
+          "description": "Deletes the actor-film join row matching the supplied actor and film ids."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/catalog/repository/custom/CustomFilmRepositoryImpl.java::part-1",
+      "purpose": "Custom Querydsl/Blaze-Persistence repository implementation for film-centric catalog queries and film-actor association access.",
+      "responsibilities": [
+        "Fetches film lists with pagination and optional filters.",
+        "Fetches actors attached to a film as projections.",
+        "Fetches detailed film information with aggregated actor names.",
+        "Uses the film mapper to convert fetched film entities into DTOs."
+      ],
+      "noteworthy_aspects": [
+        "Combines standard Querydsl queries for list/projection use cases with Blaze-Persistence for aggregated detail views.",
+        "The film list methods fetch entities and then map them through FilmMapper rather than projecting directly to DTOs.",
+        "findFilmActorById and findFilmDetailsById also wrap query.fetchFirst() in Optional.of, which assumes a non-null result.",
+        "Filtering is delegated to filterEquals for category, release year, and rating criteria.",
+        "Detail queries group by film id and category id while concatenating actor names into a single field."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "findAllFilmList(Pageable pageable)",
+          "description": "Returns a paginated list of films by fetching entities and mapping them to FilmDto.Film."
+        },
+        {
+          "method_id": "findAllFilmListWithFilter(FilmDto.FilterOption condition, Pageable pageable)",
+          "description": "Returns a paginated, filtered list of films and maps the results to FilmDto.Film."
+        },
+        {
+          "method_id": "findAllFilmActorListById(Integer filmId, Pageable pageable)",
+          "description": "Returns a paginated list of actors associated with a film."
+        },
+        {
+          "method_id": "findFilmActorById(Integer filmId, Integer actorId)",
+          "description": "Returns the actor projection for a specific film and actor pairing."
+        },
+        {
+          "method_id": "findAllFilmListDetail()",
+          "description": "Returns all film detail projections with aggregated actor information."
+        },
+        {
+          "method_id": "findFilmDetailsById(Integer filmId)",
+          "description": "Returns a single film detail projection for the given film id."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/catalog/service/ActorService.java::part-1",
+      "purpose": "Service contract for actor-related catalog operations.",
+      "responsibilities": [
+        "Defines read operations for actors, actor details, and actor-film relationships.",
+        "Defines search, create, update, and delete operations for actor records.",
+        "Exposes association maintenance operations for actor-film links."
+      ],
+      "noteworthy_aspects": [
+        "This is a pure interface with no implementation logic in the chunk.",
+        "Method signatures show support for pageable listing and filtered actor-film retrieval.",
+        "The API includes both summary DTOs and detailed DTOs, indicating separate read models for different use cases."
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "getActorList(Pageable pageable)",
+          "description": "Returns a paginated list of actors."
+        },
+        {
+          "method_id": "getActor(Integer actorId)",
+          "description": "Returns a single actor by id if present."
+        },
+        {
+          "method_id": "getActorDetailsList()",
+          "description": "Returns all actor detail records."
+        },
+        {
+          "method_id": "getActorDetails(Integer actorId)",
+          "description": "Returns a single actor detail record by id if present."
+        },
+        {
+          "method_id": "getActorFilmList(Integer actorId, FilmDto.FilterOption condition, Pageable pageable)",
+          "description": "Returns a paginated list of films associated with an actor, filtered by the supplied condition."
+        },
+        {
+          "method_id": "getActorFilm(Integer actorId, Integer filmId)",
+          "description": "Returns a specific film associated with an actor if present."
+        },
+        {
+          "method_id": "getActorFilmDetails(Integer actorId, Integer filmId)",
+          "description": "Returns detailed information for a specific actor-film association if present."
+        },
+        {
+          "method_id": "searchActorList(String name)",
+          "description": "Returns actors matching the supplied search string."
+        },
+        {
+          "method_id": "addActor(ActorDto.ActorRequest model)",
+          "description": "Creates a new actor from the supplied request model."
+        },
+        {
+          "method_id": "addActorFilm(Integer actorId, Integer filmId)",
+          "description": "Creates an actor-film association and returns the resulting film projection."
+        },
+        {
+          "method_id": "updateActor(Integer actorId, ActorDto.ActorRequest model)",
+          "description": "Updates an existing actor using the supplied request model."
+        },
+        {
+          "method_id": "deleteActor(Integer actorId)",
+          "description": "Deletes an actor by id."
+        },
+        {
+          "method_id": "removeActorFilm(Integer actorId, Integer filmId)",
+          "description": "Removes an actor-film association by ids."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/catalog/service/FilmService.java::part-1",
+      "purpose": "Defines the service contract for catalog film operations.",
+      "responsibilities": [
+        "Expose film listing and filtered/paged listing",
+        "Retrieve film summaries, actors, and detailed film views",
+        "Provide rental price lookup for a film",
+        "Support film creation, update, and deletion"
+      ],
+      "noteworthy_aspects": [
+        "Interface only; no implementation logic in this chunk",
+        "Uses DTO nested types for read and request models",
+        "Combines catalog, actor, and detail retrieval in one service contract"
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "getFilmList",
+          "description": "Returns all films as summary DTOs."
+        },
+        {
+          "method_id": "getFilmList(FilmDto.FilterOption condition, Pageable pageable)",
+          "description": "Returns a paginated film list filtered by the supplied condition."
+        },
+        {
+          "method_id": "getFilm",
+          "description": "Returns one film by identifier if present."
+        },
+        {
+          "method_id": "getFilmActorList",
+          "description": "Returns actors associated with a film, with pagination."
+        },
+        {
+          "method_id": "getFilmActor",
+          "description": "Returns one actor for a film by film and actor identifiers if present."
+        },
+        {
+          "method_id": "getFilmDetailsList",
+          "description": "Returns all film detail DTOs."
+        },
+        {
+          "method_id": "getFilmDetails",
+          "description": "Returns one film detail record by identifier if present."
+        },
+        {
+          "method_id": "getFilmRentalPrice",
+          "description": "Returns the rental price for the specified film."
+        },
+        {
+          "method_id": "addFilm",
+          "description": "Creates a film from the supplied request model and returns the created summary DTO."
+        },
+        {
+          "method_id": "updateFilm",
+          "description": "Updates the specified film using the supplied request model and returns the updated summary DTO."
+        },
+        {
+          "method_id": "deleteFilm",
+          "description": "Deletes the specified film."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/customer/repository/custom/CustomCustomerRepositoryImpl.java::part-1",
+      "purpose": "Implements custom customer read queries for details, payments, and rentals using QueryDSL.",
+      "responsibilities": [
+        "Fetch customer detail projections joined with address and city data",
+        "Fetch customer payments for a customer with optional date filtering",
+        "Fetch customer rentals for a customer with optional date and status filtering",
+        "Map entity results to payment and rental DTOs"
+      ],
+      "noteworthy_aspects": [
+        "Uses constructor projections for customer detail DTOs",
+        "Builds full-name strings in the query projection",
+        "Applies optional date bounds through shared expression helpers",
+        "Derives rental filtering from a rental status flag and return-date presence",
+        "Potentially returns empty Optional wrappers around fetchFirst results"
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "findAllCustomerDetailsList",
+          "description": "Returns all customer detail DTOs."
+        },
+        {
+          "method_id": "findCustomerDetailsById",
+          "description": "Returns one customer detail DTO by customer identifier if present."
+        },
+        {
+          "method_id": "findAllCustomerPaymentListByIdWithCondition",
+          "description": "Returns a customer's payments filtered by optional start and end dates."
+        },
+        {
+          "method_id": "findAllCustomerRentalListByIdWithCondition",
+          "description": "Returns a customer's rentals filtered by status and optional date range."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/customer/service/CustomerService.java::part-1",
+      "purpose": "Defines the service contract for customer management and customer-related history lookup.",
+      "responsibilities": [
+        "Expose customer listing and single-customer retrieval",
+        "Expose customer detail views",
+        "Provide access to customer payment and rental histories with filters",
+        "Support customer creation, update, and deletion"
+      ],
+      "noteworthy_aspects": [
+        "Interface only; no implementation logic in this chunk",
+        "Uses string dates for history queries, implying parsing occurs elsewhere",
+        "Includes rental status as part of the customer rental query contract"
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "getCustomerList",
+          "description": "Returns a paginated list of customers."
+        },
+        {
+          "method_id": "getCustomer",
+          "description": "Returns one customer by identifier if present."
+        },
+        {
+          "method_id": "getCustomerDetailsList",
+          "description": "Returns all customer detail DTOs."
+        },
+        {
+          "method_id": "getCustomerDetails",
+          "description": "Returns one customer detail DTO by identifier if present."
+        },
+        {
+          "method_id": "getCustomerPaymentList",
+          "description": "Returns payments for a customer within the supplied date range strings."
+        },
+        {
+          "method_id": "getCustomerRentalList",
+          "description": "Returns rentals for a customer filtered by status and date range strings."
+        },
+        {
+          "method_id": "addCustomer",
+          "description": "Creates a customer from the supplied request model."
+        },
+        {
+          "method_id": "updateCustomer",
+          "description": "Updates the specified customer from the supplied request model."
+        },
+        {
+          "method_id": "deleteCustomer",
+          "description": "Deletes the specified customer."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/location/repository/custom/CustomAddressRepositoryImpl.java::part-1",
+      "purpose": "Provides a custom address repository implementation stub.",
+      "responsibilities": [
+        "Declare address detail lookup operations",
+        "Act as the Spring repository component for address-specific custom queries"
+      ],
+      "noteworthy_aspects": [
+        "Methods are unimplemented placeholders: one returns null and the other returns Optional.empty()",
+        "No query factory or mapper dependencies are present in this chunk"
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "findAllAddressDetailsList",
+          "description": "Currently returns null instead of address detail results."
+        },
+        {
+          "method_id": "findAddressDetailsById",
+          "description": "Currently returns an empty Optional instead of an address detail result."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/location/service/LocationService.java::part-1",
+      "purpose": "Defines the service contract for location management across addresses and cities.",
+      "responsibilities": [
+        "Expose address listing, detail retrieval, and CRUD operations",
+        "Expose city listing, retrieval, and CRUD operations"
+      ],
+      "noteworthy_aspects": [
+        "Interface only; no implementation logic in this chunk",
+        "Separates address details from basic address listing",
+        "Covers both address and city domain operations in one service"
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "getAddressList",
+          "description": "Returns a paginated list of addresses."
+        },
+        {
+          "method_id": "getAddress",
+          "description": "Returns one address by identifier if present."
+        },
+        {
+          "method_id": "getAddressDetailsList",
+          "description": "Returns all address detail DTOs."
+        },
+        {
+          "method_id": "getAddressDetails",
+          "description": "Returns one address detail DTO by identifier if present."
+        },
+        {
+          "method_id": "addAddress",
+          "description": "Creates an address from the supplied request model."
+        },
+        {
+          "method_id": "updateAddress",
+          "description": "Updates the specified address from the supplied request model."
+        },
+        {
+          "method_id": "deleteAddress",
+          "description": "Deletes the specified address."
+        },
+        {
+          "method_id": "getCityList",
+          "description": "Returns a paginated list of cities."
+        },
+        {
+          "method_id": "getCity",
+          "description": "Returns one city by identifier if present."
+        },
+        {
+          "method_id": "addCity",
+          "description": "Creates a city from the supplied request model."
+        },
+        {
+          "method_id": "updateCity",
+          "description": "Updates the specified city from the supplied request model."
+        },
+        {
+          "method_id": "deleteCity",
+          "description": "Deletes the specified city."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/payment/repository/custom/CustomPaymentRepositoryImpl.java::part-1",
+      "purpose": "Implements custom payment repository queries for payment details and sales analytics.",
+      "responsibilities": [
+        "Declare payment detail lookup operations",
+        "Calculate sales totals by category",
+        "Calculate sales totals by store with presentation adjustments"
+      ],
+      "noteworthy_aspects": [
+        "Two detail lookup methods are stubbed out with null and empty Optional returns",
+        "Sales-by-category uses joins across payment, rental, inventory, film, and film-category tables",
+        "Sales-by-store builds display strings from city and country identifiers, then post-processes them with country replacement",
+        "Repository focuses on aggregate reporting rather than basic CRUD"
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "findAllPaymentDetailsList",
+          "description": "Currently returns null instead of payment detail results."
+        },
+        {
+          "method_id": "findPaymentDetailsById",
+          "description": "Currently returns an empty Optional instead of a payment detail result."
+        },
+        {
+          "method_id": "calculateSalesByCategory",
+          "description": "Returns grouped sales totals by film category, ordered by highest total sales first."
+        },
+        {
+          "method_id": "calculateSalesByStore",
+          "description": "Returns grouped sales totals by store and rewrites country identifiers in the store display string."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/payment/service/PaymentService.java::part-1",
+      "purpose": "Defines the service contract for payment operations.",
+      "responsibilities": [
+        "Expose payment listing and single-payment lookup",
+        "Expose payment detail lookup",
+        "Support payment creation, update, and deletion"
+      ],
+      "noteworthy_aspects": [
+        "Interface only; no implementation logic in this chunk",
+        "Creation requires related customer, staff, and rental domain objects"
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "getPaymentList",
+          "description": "Returns a paginated list of payments."
+        },
+        {
+          "method_id": "getPayment",
+          "description": "Returns one payment by identifier if present."
+        },
+        {
+          "method_id": "getPaymentDetailsList",
+          "description": "Returns all payment detail DTOs."
+        },
+        {
+          "method_id": "getPaymentDetails",
+          "description": "Returns one payment detail DTO by identifier if present."
+        },
+        {
+          "method_id": "createPayment",
+          "description": "Creates a payment from the request model and related customer, staff, and rental objects."
+        },
+        {
+          "method_id": "updatePayment",
+          "description": "Updates the specified payment from the supplied request model."
+        },
+        {
+          "method_id": "deletePayment",
+          "description": "Deletes the specified payment."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/rental/repository/custom/CustomRentalRepositoryImpl.java::part-1",
+      "purpose": "Implements a custom rental query for finding an active rented DVD by customer and inventory.",
+      "responsibilities": [
+        "Search for an open rental record matching customer and inventory identifiers",
+        "Return the first matching rental entity"
+      ],
+      "noteworthy_aspects": [
+        "Filters on null returnDate to identify active rentals",
+        "Uses fetchFirst, so only one matching rental is returned",
+        "Repository method returns the entity directly rather than a DTO"
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "findRentedDvdRentalId",
+          "description": "Returns the active rental entity for the given customer and inventory identifiers, or null if none is found."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/rental/service/RentalService.java::part-1",
+      "purpose": "Defines the service contract for rental lifecycle operations and overdue calculations.",
+      "responsibilities": [
+        "Expose rental listing and single-rental lookup",
+        "Provide overdue rental totals for all rentals and per customer",
+        "Support DVD rental, return, update, and deletion workflows"
+      ],
+      "noteworthy_aspects": [
+        "Interface only; no implementation logic in this chunk",
+        "Return flow accepts a generic map of string values, implying request decoding occurs elsewhere"
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "getRentalList",
+          "description": "Returns a paginated list of rentals."
+        },
+        {
+          "method_id": "getRental",
+          "description": "Returns one rental by identifier if present."
+        },
+        {
+          "method_id": "getOverdueRentalList",
+          "description": "Returns the total overdue amount across all rentals."
+        },
+        {
+          "method_id": "getOverdueRental",
+          "description": "Returns the overdue amount for the specified customer."
+        },
+        {
+          "method_id": "rentDvd",
+          "description": "Creates a rental from the supplied create request."
+        },
+        {
+          "method_id": "returnDvd",
+          "description": "Processes a DVD return from the supplied string map and returns the updated rental."
+        },
+        {
+          "method_id": "updateRental",
+          "description": "Updates the specified rental from the supplied update request."
+        },
+        {
+          "method_id": "deleteRental",
+          "description": "Deletes the specified rental."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/staff/repository/custom/CustomStaffRepositoryImpl.java::part-1",
+      "purpose": "Implements custom staff read queries for staff details using QueryDSL.",
+      "responsibilities": [
+        "Fetch staff detail projections joined with address and city data",
+        "Expose list and single-record staff detail queries"
+      ],
+      "noteworthy_aspects": [
+        "Uses constructor projection for staff detail DTOs",
+        "Builds full-name strings in-query",
+        "Reuses a private helper for both list and single-record retrieval",
+        "Potentially wraps a null fetchFirst result in Optional.of"
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "findAllStaffDetailsList",
+          "description": "Returns all staff detail DTOs."
+        },
+        {
+          "method_id": "findStaffDetailsById",
+          "description": "Returns one staff detail DTO by staff identifier if present."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/staff/service/StaffService.java::part-1",
+      "purpose": "Defines the service contract for staff management and staff detail lookup.",
+      "responsibilities": [
+        "Expose staff listing and single-staff retrieval",
+        "Expose staff detail views",
+        "Support staff creation, update, and removal"
+      ],
+      "noteworthy_aspects": [
+        "Interface only; no implementation logic in this chunk",
+        "Uses remove rather than delete for staff removal"
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "getStaffList",
+          "description": "Returns a paginated list of staff members."
+        },
+        {
+          "method_id": "getStaff",
+          "description": "Returns one staff member by identifier if present."
+        },
+        {
+          "method_id": "getStaffDetailsList",
+          "description": "Returns all staff detail DTOs."
+        },
+        {
+          "method_id": "getStaffDetails",
+          "description": "Returns one staff detail DTO by identifier if present."
+        },
+        {
+          "method_id": "addStaff",
+          "description": "Creates a staff member from the supplied request model."
+        },
+        {
+          "method_id": "updateStaff",
+          "description": "Updates the specified staff member from the supplied request model."
+        },
+        {
+          "method_id": "removeStaff",
+          "description": "Removes the specified staff member."
+        }
+      ]
+    },
+    {
+      "chunk_id": "src/main/java/com/example/app/services/store/repository/custom/CustomStoreRepositoryImpl.java::part-1",
+      "purpose": "Implements custom store queries for store details and store staff listings.",
+      "responsibilities": [
+        "Fetch store detail projections with location and manager data",
+        "Post-process store and address display strings to replace country identifiers",
+        "Fetch staff members for a given store"
+      ],
+      "noteworthy_aspects": [
+        "Uses constructor projection for store detail DTOs",
+        "Applies country identifier replacement after query execution",
+        "Conditionally adds store filter only when an id is provided",
+        "Defines a separate query path for store staff lookup"
+      ],
+      "method_descriptions": [
+        {
+          "method_id": "findAllStoreDetailsList",
+          "description": "Returns all store detail DTOs and normalizes country identifiers in the result strings."
+        },
+        {
+          "method_id": "findStoreDetailsById",
+          "description": "Returns one store detail DTO by store identifier and normalizes country identifiers."
+        },
+        {
+          "method_id": "findAllStoreStaffList",
+          "description": "Returns all staff members for the specified store."
+        },
+        {
+          "method_id": "findStoreStaffById",
+          "description": "Returns one staff member for the specified store and staff identifiers if present."
+        }
+      ]
+    }
+  ]
+}
