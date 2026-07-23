@@ -1,0 +1,16 @@
+# Secrets stay in .env. Explicit command-line options override these values.
+[analysis]
+provider = "openai"
+model = "gpt-5.4-mini"
+repo_url = "https://github.com/codejsha/spring-rest-sakila.git"
+ref = "main"
+output = "output/spring-rest-sakila-openai-analysis.json"
+
+openai_timeout_seconds = 180
+connect_timeout_seconds = 10
+max_retries = 3
+
+cache_dir = ".codebase-analyzer-cache"
+cache_mode = "use"
+max_llm_files = 60
+max_key_methods = 75

@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.codebase-analyzer-cache/
+.env
+*.pyc
+
+# Reproducible local build artifacts and execution logs
+/dist/
+/output/*.log

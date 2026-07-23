@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "codebase-knowledge-extractor"
+version = "0.1.0"
+description = "Hybrid static-analysis and LLM pipeline for structured codebase knowledge extraction"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "httpx>=0.28,<1.0",
+  "langchain-openai>=1.0,<2.0",
+  "pydantic>=2.10,<3.0",
+  "python-dotenv>=1.0,<2.0",
+  "tiktoken>=0.9,<1.0",
+  "tree-sitter>=0.25,<0.26",
+  "tree-sitter-java>=0.23,<0.24",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3,<10.0",
+  "ruff>=0.11,<1.0",
+]
+
+[project.scripts]
+codebase-analyzer = "codebase_analyzer.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/codebase_analyzer"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
